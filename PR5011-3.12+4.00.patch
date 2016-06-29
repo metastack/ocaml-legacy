@@ -1,0 +1,15 @@
+diff -Naur a/otherlibs/labltk/support/camltk.h b/otherlibs/labltk/support/camltk.h
+--- a/otherlibs/labltk/support/camltk.h	2010-04-03 07:43:51.000000000 +0100
++++ b/otherlibs/labltk/support/camltk.h	2016-06-17 16:59:37.988651700 +0100
+@@ -27,11 +27,6 @@
+ #define CONST84
+ #endif
+ 
+-/* if Tcl_GetStringResult is not defined, we use interp->result */
+-#ifndef Tcl_GetStringResult
+-#  define Tcl_GetStringResult(interp) (interp->result)
+-#endif
+-
+ /* cltkMisc.c */
+ /* copy a Caml string to the C heap. Must be deallocated with stat_free */
+ extern char *string_to_c(value s);

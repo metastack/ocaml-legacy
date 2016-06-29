@@ -1,0 +1,69 @@
+diff -Naur a/asmcomp/i386/proc.ml b/asmcomp/i386/proc.ml
+--- a/asmcomp/i386/proc.ml	2006-07-25 09:31:56.000000000 +0100
++++ b/asmcomp/i386/proc.ml	2016-06-15 21:40:01.792187100 +0100
+@@ -181,7 +181,7 @@
+ (* Calling the assembler *)
+ 
+ let assemble_file infile outfile =
+-  Ccomp.command ("as -o " ^ Filename.quote outfile ^ " " ^ Filename.quote infile)
++  Ccomp.command (Printf.sprintf "%sas -o %s %s" (if Config.system = "mingw" then "i686-w64-mingw32-" else "") (Filename.quote outfile) (Filename.quote infile))
+ 
+ open Clflags;;
+ open Config;;
+diff -Naur a/config/Makefile.mingw b/config/Makefile.mingw
+--- a/config/Makefile.mingw	2005-08-01 16:51:09.000000000 +0100
++++ b/config/Makefile.mingw	2016-06-16 09:23:02.310645700 +0100
+@@ -45,7 +45,7 @@
+ ########## Configuration for the bytecode compiler
+ 
+ ### Which C compiler to use for the bytecode interpreter.
+-BYTECC=gcc -mno-cygwin
++BYTECC=i686-w64-mingw32-gcc
+ 
+ ### Additional compile-time options for $(BYTECC).  (For static linking.)
+ BYTECCCOMPOPTS=-O -mms-bitfields -Wall -Wno-unused
+@@ -64,16 +64,16 @@
+ CPP=$(BYTECC) -E
+ 
+ ### How to build a DLL
+-MKDLL=$(BYTECC) -shared -o $(1) -Wl,--out-implib,$(2) $(3)
++MKDLL=$(BYTECC) -static-libgcc -shared -o $(1) -Wl,--out-implib,$(2) $(3)
+ 
+ ### How to build a static library
+-MKLIB=rm -f $(1); ar rcs $(1) $(2)
++MKLIB=rm -f $(1); i686-w64-mingw32-ar rcs $(1) $(2)
+ 
+ ### Canonicalize the name of a system library
+ SYSLIB=-l$(1)
+ 
+ ### The ranlib command
+-RANLIBCMD=ranlib
++RANLIBCMD=i686-w64-mingw32-ranlib
+ 
+ ############# Configuration for the native-code compiler
+ 
+diff -Naur a/utils/ccomp.ml b/utils/ccomp.ml
+--- a/utils/ccomp.ml	2005-03-24 17:20:54.000000000 +0000
++++ b/utils/ccomp.ml	2016-06-15 21:40:01.807812100 +0100
+@@ -80,7 +80,8 @@
+                              quoted_archive (quote_files file_list))
+   | _ ->
+       let r1 =
+-        command(Printf.sprintf "ar rc %s %s"
++        command(Printf.sprintf "%sar rc %s %s"
++                (if Config.system = "mingw" then "i686-w64-mingw32-" else "")
+                 quoted_archive (quote_files file_list)) in
+       if r1 <> 0 || String.length Config.ranlib = 0
+       then r1
+diff -Naur a/win32caml/Makefile b/win32caml/Makefile
+--- a/win32caml/Makefile	2004-06-17 08:33:44.000000000 +0100
++++ b/win32caml/Makefile	2016-06-15 21:40:01.807812100 +0100
+@@ -36,7 +36,7 @@
+ 	rm -f ocaml.res
+ endif
+ ifeq ($(TOOLCHAIN),mingw)
+-	windres -i ocaml.rc -o $@
++	i686-w64-mingw32-windres -i ocaml.rc -o $@
+ endif
+ 
+ $(OBJS): inria.h inriares.h history.h editbuffer.h

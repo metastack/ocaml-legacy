@@ -1,0 +1,32 @@
+diff -Naur a/config/Makefile.msvc64 b/config/Makefile.msvc64
+--- a/config/Makefile.msvc64	2007-03-01 09:50:58.000000000 +0000
++++ b/config/Makefile.msvc64	2016-06-19 21:13:51.867671600 +0100
+@@ -147,15 +147,24 @@
+ 
+ ############# Configuration for the contributed libraries
+ 
+-OTHERLIBRARIES=win32unix systhreads str num win32graph dynlink bigarray
++OTHERLIBRARIES=win32unix systhreads str num win32graph dynlink bigarray labltk
+ 
+ ### Name of the target architecture for the "num" library
+ BNG_ARCH=generic
+ BNG_ASM_LEVEL=0
+ 
+-### Configuration for LablTk (not supported)
+-TK_DEFS=
+-TK_LINK=
++### Configuration for LablTk
++# Set TK_ROOT to the directory where you installed TCL/TK 8.3
++TK_ROOT=c:/tcl
++TK_DEFS=-I$(TK_ROOT)/include
++# The following definition avoids hard-wiring $(TK_ROOT) in the libraries
++# produced by OCaml, and is therefore required for binary distribution
++# of these libraries.  However, $(TK_ROOT) must be added to the LIB
++# environment variable, as described in README.win32.
++TK_LINK=tk84.lib tcl84.lib
++# An alternative definition that avoids mucking with the LIB variable,
++# but hard-wires the Tcl/Tk location in the binaries
++# TK_LINK=$(TK_ROOT)/tk83.lib $(TK_ROOT)/tcl83.lib
+ 
+ ############# Aliases for common commands
+ 

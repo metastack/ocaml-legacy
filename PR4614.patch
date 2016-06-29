@@ -1,0 +1,111 @@
+From abb5457f486ab04c185602e3954c80b31e65e0b2 Mon Sep 17 00:00:00 2001
+From: David Allsopp <david.allsopp@metastack.com>
+Date: Fri, 17 Jun 2016 11:43:41 +0100
+Subject: [PATCH] Back-port Tcl/Tk 8.5 compatibility fixes
+
+---
+ configure                           | 1 +
+ otherlibs/labltk/support/camltk.h   | 7 ++++++-
+ otherlibs/labltk/support/cltkCaml.c | 6 ++++--
+ otherlibs/labltk/support/cltkImg.c  | 6 +++++-
+ otherlibs/labltk/tkanim/tkAnimGIF.c | 6 +++++-
+ 5 files changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/configure b/configure
+index f79dec1..2b2b054 100755
+--- a/configure
++++ b/configure
+@@ -1335,6 +1335,7 @@ if test $has_tk = true; then
+     8.2) tclmaj=8 tclmin=2 tkmaj=8 tkmin=2 ;;
+     8.3) tclmaj=8 tclmin=3 tkmaj=8 tkmin=3 ;;
+     8.4) tclmaj=8 tclmin=4 tkmaj=8 tkmin=4 ;;
++    8.5) tclmaj=8 tclmin=5 tkmaj=8 tkmin=5 ;;
+     *) echo "This version is not known."; has_tk=false ;;
+     esac
+   else
+diff --git a/otherlibs/labltk/support/camltk.h b/otherlibs/labltk/support/camltk.h
+index deba330..b2ef50e 100644
+--- a/otherlibs/labltk/support/camltk.h
++++ b/otherlibs/labltk/support/camltk.h
+@@ -22,6 +22,11 @@
+ #define CAMLTKextern CAMLextern
+ #endif
+ 
++/* compatibility with earlier versions of Tcl/Tk */
++#ifndef CONST84
++#define CONST84
++#endif
++
+ /* cltkMisc.c */
+ /* copy a Caml string to the C heap. Must be deallocated with stat_free */
+ extern char *string_to_c(value s);
+@@ -39,7 +44,7 @@ extern value copy_string_list(int argc, char ** argv);
+ extern value *tkerror_exn;
+ extern value *handler_code;
+ extern int CamlCBCmd(ClientData clientdata, Tcl_Interp *interp,
+-                     int argc, char *argv[]);
++                     int argc, CONST84 char *argv[]);
+ CAMLTKextern void tk_error(char * errmsg) Noreturn;
+ 
+ /* cltkMain.c */
+diff --git a/otherlibs/labltk/support/cltkCaml.c b/otherlibs/labltk/support/cltkCaml.c
+index 976c864..c9bcc80 100644
+--- a/otherlibs/labltk/support/cltkCaml.c
++++ b/otherlibs/labltk/support/cltkCaml.c
+@@ -28,7 +28,8 @@ value * tkerror_exn = NULL;
+ value * handler_code = NULL;
+ 
+ /* The Tcl command for evaluating callback in Caml */
+-int CamlCBCmd(ClientData clientdata, Tcl_Interp *interp, int argc, char **argv)
++int CamlCBCmd(ClientData clientdata, Tcl_Interp *interp,
++              int argc, CONST84 char **argv)
+ {
+   CheckInit();
+ 
+@@ -38,7 +39,8 @@ int CamlCBCmd(ClientData clientdata, Tcl_Interp *interp, int argc, char **argv)
+     int id;
+     if (Tcl_GetInt(interp, argv[1], &id) != TCL_OK)
+       return TCL_ERROR;
+-    callback2(*handler_code,Val_int(id),copy_string_list(argc - 2,&argv[2]));
++    callback2(*handler_code,Val_int(id),
++              copy_string_list(argc - 2,(char **)&argv[2]));
+     /* Never fails (Caml would have raised an exception) */
+     /* but result may have been set by callback */
+     return TCL_OK;
+diff --git a/otherlibs/labltk/support/cltkImg.c b/otherlibs/labltk/support/cltkImg.c
+index 1debe82..143097a 100644
+--- a/otherlibs/labltk/support/cltkImg.c
++++ b/otherlibs/labltk/support/cltkImg.c
+@@ -99,7 +99,11 @@ camltk_setimgdata_native (value imgname, value pixmap, value x, value y,
+   pib.offset[0] = 0;
+   pib.offset[1] = 1;
+   pib.offset[2] = 2;
+-  Tk_PhotoPutBlock(ph,&pib,Int_val(x),Int_val(y),Int_val(w),Int_val(h)
++  Tk_PhotoPutBlock(
++#if (TK_MAJOR_VERSION == 8 && TK_MINOR_VERSION >= 5 || TK_MAJOR_VERSION > 8)
++        NULL,
++#endif
++ph,&pib,Int_val(x),Int_val(y),Int_val(w),Int_val(h)
+ #if (TK_MAJOR_VERSION == 8 && TK_MINOR_VERSION >= 4 || TK_MAJOR_VERSION > 8)
+                    , TK_PHOTO_COMPOSITE_SET
+ #endif
+diff --git a/otherlibs/labltk/tkanim/tkAnimGIF.c b/otherlibs/labltk/tkanim/tkAnimGIF.c
+index 1beb814..410520b 100644
+--- a/otherlibs/labltk/tkanim/tkAnimGIF.c
++++ b/otherlibs/labltk/tkanim/tkAnimGIF.c
+@@ -335,7 +335,11 @@ FileReadGIF(interp, f, fileName, formatString)
+                 goto error;
+             }
+         }
+-        Tk_PhotoPutBlock(photoHandle, &block, 0, 0, imageWidth, imageHeight
++        Tk_PhotoPutBlock(
++#if (TK_MAJOR_VERSION == 8 && TK_MINOR_VERSION >= 5 || TK_MAJOR_VERSION > 8)
++	NULL,
++#endif
++photoHandle, &block, 0, 0, imageWidth, imageHeight
+ #if (TK_MAJOR_VERSION == 8 && TK_MINOR_VERSION >= 4 || TK_MAJOR_VERSION > 8)
+                    , TK_PHOTO_COMPOSITE_SET
+ #endif
+-- 
+2.6.2.windows.1
+

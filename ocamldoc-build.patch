@@ -1,0 +1,12 @@
+diff -Naur a/ocamldoc/Makefile.nt b/ocamldoc/Makefile.nt
+--- a/ocamldoc/Makefile.nt	2010-05-28 12:21:46.000000000 +0100
++++ b/ocamldoc/Makefile.nt	2016-06-15 12:31:56.323953400 +0100
+@@ -22,7 +22,7 @@
+ OCAMLLIB = $(LIBDIR)
+ OCAMLBIN = $(BINDIR)
+ 
+-OCAMLPP=-pp "grep -v DEBUG"
++OCAMLPP=-pp "grep -va DEBUG"
+ 
+ # For installation
+ ##############

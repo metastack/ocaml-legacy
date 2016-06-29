@@ -1,0 +1,13 @@
+diff -Naur a/config/Makefile.msvc64 b/config/Makefile.msvc64
+--- a/config/Makefile.msvc64	2008-07-29 09:31:41.000000000 +0100
++++ b/config/Makefile.msvc64	2016-06-19 21:10:57.977668900 +0100
+@@ -89,7 +89,8 @@
+ DLLCCCOMPOPTS=/Ox /MD
+ 
+ ### Libraries needed
+-EXTRALIBS=bufferoverflowu.lib
++#EXTRALIBS=bufferoverflowu.lib  # for the old PSDK compiler only
++EXTRALIBS=
+ BYTECCLIBS=advapi32.lib ws2_32.lib $(EXTRALIBS)
+ NATIVECCLIBS=advapi32.lib ws2_32.lib $(EXTRALIBS)
+ 

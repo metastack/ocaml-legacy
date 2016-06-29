@@ -1,0 +1,58 @@
+diff -Naur a/config/Makefile.mingw64 b/config/Makefile.mingw64
+--- a/config/Makefile.mingw64	2012-05-15 15:18:16.000000000 +0100
++++ b/config/Makefile.mingw64	2016-06-19 21:25:52.436870000 +0100
+@@ -151,15 +151,18 @@
+ 
+ ############# Configuration for the contributed libraries
+ 
+-OTHERLIBRARIES=win32unix str num win32graph dynlink bigarray systhreads
++OTHERLIBRARIES=win32unix str num win32graph dynlink bigarray systhreads labltk
+ 
+ ### Name of the target architecture for the "num" library
+ BNG_ARCH=amd64
+ BNG_ASM_LEVEL=1
+ 
+-### Configuration for LablTk (not supported)
+-TK_DEFS=
+-TK_LINK=
++### Configuration for LablTk
++# Set TK_ROOT to the directory where you installed TCL/TK 8.5
++# There must be no spaces or special characters in $(TK_ROOT)
++TK_ROOT=c:/tcl
++TK_DEFS=-I$(TK_ROOT)/include
++TK_LINK=$(TK_ROOT)/bin/tk85.dll $(TK_ROOT)/bin/tcl85.dll -lws2_32
+ 
+ ############# Aliases for common commands
+ 
+diff -Naur a/config/Makefile.msvc64 b/config/Makefile.msvc64
+--- a/config/Makefile.msvc64	2012-05-15 15:18:16.000000000 +0100
++++ b/config/Makefile.msvc64	2016-06-19 21:25:23.948765000 +0100
+@@ -156,15 +156,24 @@
+ 
+ ############# Configuration for the contributed libraries
+ 
+-OTHERLIBRARIES=win32unix systhreads str num win32graph dynlink bigarray
++OTHERLIBRARIES=win32unix systhreads str num win32graph dynlink bigarray labltk
+ 
+ ### Name of the target architecture for the "num" library
+ BNG_ARCH=generic
+ BNG_ASM_LEVEL=0
+ 
+-### Configuration for LablTk (not supported)
+-TK_DEFS=
+-TK_LINK=
++### Configuration for LablTk
++# Set TK_ROOT to the directory where you installed TCL/TK 8.5
++TK_ROOT=c:/tcl
++TK_DEFS=-I$(TK_ROOT)/include
++# The following definition avoids hard-wiring $(TK_ROOT) in the libraries
++# produced by OCaml, and is therefore required for binary distribution
++# of these libraries.  However, $(TK_ROOT)/lib must be added to the LIB
++# environment variable, as described in README.win32.
++TK_LINK=tk85.lib tcl85.lib ws2_32.lib
++# An alternative definition that avoids mucking with the LIB variable,
++# but hard-wires the Tcl/Tk location in the binaries
++# TK_LINK=$(TK_ROOT)/tk85.lib $(TK_ROOT)/tcl85.lib ws2_32.lib
+ 
+ ############# Aliases for common commands
+ 

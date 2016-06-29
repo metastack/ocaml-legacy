@@ -1,0 +1,6 @@
+# Default behaviour, for users core.autocrlf not set
+* text=auto
+
+*.sh text eol=lf
+
+*.patch binary

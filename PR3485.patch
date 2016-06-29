@@ -1,0 +1,29 @@
+From 1fed8011677822dd271668c6549b736884fb937e Mon Sep 17 00:00:00 2001
+From: Xavier Leroy <xavier.leroy@inria.fr>
+Date: Wed, 2 Feb 2005 15:41:59 +0000
+Subject: [PATCH] Revu construction de camlheader
+
+git-svn-id: http://caml.inria.fr/svn/ocaml/version/3.08@6771 f963ae5c-01c2-4b8c-9fe0-0dff7051ff02
+---
+ stdlib/Makefile.nt | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/stdlib/Makefile.nt b/stdlib/Makefile.nt
+index 5df7c7e..9ef5c8a 100644
+--- a/stdlib/Makefile.nt
++++ b/stdlib/Makefile.nt
+@@ -54,8 +54,9 @@ stdlib.cmxa: $(OBJS:.cmo=.cmx)
+ 	$(CAMLOPT) -a -o stdlib.cmxa $(OBJS:.cmo=.cmx)
+ 
+ camlheader camlheader_ur: headernt.c ../config/Makefile
+-	$(BYTECC) $(BYTECCCOMPOPTS) $(BYTECCLINKOPTS) -o camlheader.exe headernt.c
+-	mv camlheader.exe camlheader.
++	$(BYTECC) $(BYTECCCOMPOPTS) $(BYTECCLINKOPTS) -o tmpheader.exe headernt.c
++	rm -f camlheader.exe
++	mv tmpheader.exe camlheader
+ 	cp camlheader camlheader_ur
+ 
+ clean::
+-- 
+2.6.2.windows.1
+

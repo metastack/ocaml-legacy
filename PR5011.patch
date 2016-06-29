@@ -1,0 +1,139 @@
+diff -Naur a/otherlibs/labltk/support/cltkDMain.c b/otherlibs/labltk/support/cltkDMain.c
+--- a/otherlibs/labltk/support/cltkDMain.c	2001-12-07 13:40:08.000000000 +0000
++++ b/otherlibs/labltk/support/cltkDMain.c	2016-06-17 15:02:33.034955200 +0100
+@@ -223,7 +223,7 @@
+       if (0 == access(f,R_OK)) 
+         if (TCL_OK != Tcl_EvalFile(cltclinterp,f)) {
+           stat_free(f);
+-          tk_error(cltclinterp->result);
++          tk_error(Tcl_GetStringResult(cltclinterp));
+         };
+       stat_free(f);
+     }
+diff -Naur a/otherlibs/labltk/support/cltkEval.c b/otherlibs/labltk/support/cltkEval.c
+--- a/otherlibs/labltk/support/cltkEval.c	2003-07-10 10:18:02.000000000 +0100
++++ b/otherlibs/labltk/support/cltkEval.c	2016-06-17 15:02:33.034955200 +0100
+@@ -75,9 +75,9 @@
+ 
+   switch (code) {
+   case TCL_OK:
+-    return tcl_string_to_caml(cltclinterp->result);
++    return tcl_string_to_caml(Tcl_GetStringResult(cltclinterp));
+   case TCL_ERROR:
+-    tk_error(cltclinterp->result);
++    tk_error(Tcl_GetStringResult(cltclinterp));
+   default:  /* TCL_BREAK, TCL_CONTINUE, TCL_RETURN */
+     tk_error("bad tcl result");
+   }
+@@ -236,9 +236,9 @@
+   
+   switch (result) {
+   case TCL_OK:
+-    return tcl_string_to_caml (cltclinterp->result);
++    return tcl_string_to_caml (Tcl_GetStringResult(cltclinterp));
+   case TCL_ERROR:
+-    tk_error(cltclinterp->result);
++    tk_error(Tcl_GetStringResult(cltclinterp));
+   default:  /* TCL_BREAK, TCL_CONTINUE, TCL_RETURN */
+     tk_error("bad tcl result");
+   }
+diff -Naur a/otherlibs/labltk/support/cltkMain.c b/otherlibs/labltk/support/cltkMain.c
+--- a/otherlibs/labltk/support/cltkMain.c	2002-07-23 15:11:59.000000000 +0100
++++ b/otherlibs/labltk/support/cltkMain.c	2016-06-17 15:04:20.979291100 +0100
+@@ -95,7 +95,7 @@
+     }
+ 
+     if (Tcl_Init(cltclinterp) != TCL_OK)
+-      tk_error(cltclinterp->result);
++      tk_error(Tcl_GetStringResult(cltclinterp));
+     Tcl_SetVar(cltclinterp, "argv0", String_val (argv0), TCL_GLOBAL_ONLY);
+ 
+     { /* Sets argv */
+@@ -132,13 +132,13 @@
+       }
+     }
+     if (Tk_Init(cltclinterp) != TCL_OK)
+-      tk_error(cltclinterp->result);
++      tk_error(Tcl_GetStringResult(cltclinterp));
+ 
+     /* Retrieve the main window */
+     cltk_mainWindow = Tk_MainWindow(cltclinterp);
+ 
+     if (NULL == cltk_mainWindow)
+-      tk_error(cltclinterp->result);
++      tk_error(Tcl_GetStringResult(cltclinterp));
+   
+     Tk_GeometryRequest(cltk_mainWindow,200,200);
+   }
+@@ -165,7 +165,7 @@
+       if (0 == access(f,R_OK)) 
+         if (TCL_OK != Tcl_EvalFile(cltclinterp,f)) {
+           stat_free(f);
+-          tk_error(cltclinterp->result);
++          tk_error(Tcl_GetStringResult(cltclinterp));
+         };
+       stat_free(f);
+     }
+diff -Naur a/otherlibs/labltk/support/cltkMisc.c b/otherlibs/labltk/support/cltkMisc.c
+--- a/otherlibs/labltk/support/cltkMisc.c	2002-07-23 15:11:59.000000000 +0100
++++ b/otherlibs/labltk/support/cltkMisc.c	2016-06-17 15:02:33.034955200 +0100
+@@ -47,7 +47,7 @@
+   case TCL_ERROR:
+   default:
+     stat_free( utf );
+-    tk_error(cltclinterp->result);
++    tk_error(Tcl_GetStringResult(cltclinterp));
+   }
+ }
+ 
+diff -Naur a/otherlibs/labltk/support/cltkVar.c b/otherlibs/labltk/support/cltkVar.c
+--- a/otherlibs/labltk/support/cltkVar.c	2002-07-23 15:11:59.000000000 +0100
++++ b/otherlibs/labltk/support/cltkVar.c	2016-06-17 15:04:59.510541100 +0100
+@@ -38,7 +38,7 @@
+   stat_free(stable_var);
+ 
+   if (s == NULL)
+-    tk_error(cltclinterp->result);
++    tk_error(Tcl_GetStringResult(cltclinterp));
+   else 
+     return(tcl_string_to_caml(s));
+ }
+@@ -64,7 +64,7 @@
+   stat_free(utf_contents);
+ 
+   if (s == NULL)
+-    tk_error(cltclinterp->result);
++    tk_error(Tcl_GetStringResult(cltclinterp));
+   else 
+     return(Val_unit);
+ }
+@@ -104,7 +104,7 @@
+                    (ClientData) (Long_val(cbid)))
+                    != TCL_OK) {
+     stat_free(cvar);
+-    tk_error(cltclinterp->result);
++    tk_error(Tcl_GetStringResult(cltclinterp));
+   };
+   stat_free(cvar);
+   return Val_unit;
+diff -Naur a/otherlibs/labltk/support/cltkWait.c b/otherlibs/labltk/support/cltkWait.c
+--- a/otherlibs/labltk/support/cltkWait.c	2002-07-23 15:11:59.000000000 +0100
++++ b/otherlibs/labltk/support/cltkWait.c	2016-06-17 15:02:33.050580200 +0100
+@@ -66,7 +66,7 @@
+   vis->win = Tk_NameToWindow(cltclinterp, String_val(win), cltk_mainWindow);
+   if (vis -> win == NULL) {
+     stat_free((char *)vis);
+-    tk_error(cltclinterp->result);
++    tk_error(Tcl_GetStringResult(cltclinterp));
+   };
+   vis->cbid = Int_val(cbid);
+   Tk_CreateEventHandler(vis->win, VisibilityChangeMask,
+@@ -93,7 +93,7 @@
+   vis->win = Tk_NameToWindow(cltclinterp, String_val(win), cltk_mainWindow);
+   if (vis -> win == NULL) {
+     stat_free((char *)vis);
+-    tk_error(cltclinterp->result);
++    tk_error(Tcl_GetStringResult(cltclinterp));
+   };
+   vis->cbid = Int_val(cbid);
+   Tk_CreateEventHandler(vis->win, StructureNotifyMask,
