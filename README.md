@@ -8,6 +8,10 @@ Additionally, a couple of utility shell scripts are provided for doing bulk-buil
 
 `config-option` (OCaml 3.07--3.08.4): back-ports the `-config` option added in 3.09.0. The patch is compatible with GPR465 and uses the identifier `config-option`.
 
+The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pulls):
+
+[`GPR465`](https://github.com/ocaml/ocaml/pull/465) (OCaml 3.07--): adds a `patches` to the output of `ocamlc -config` for noting changes to the compiler. The patches themselves are from the pull request. The patch combines with the `config-option` patch to support 3.07 and 3.08 as well.
+
 ## Patches
 
 The following patches address build system or environment changes which have occurred since these versions of OCaml were originally released:
