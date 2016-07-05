@@ -42,6 +42,15 @@ diff -Naur a/config/Makefile.mingw b/config/Makefile.mingw
  
  ############# Configuration for the native-code compiler
  
+@@ -96,7 +96,7 @@
+ NATIVECCLINKOPTS=
+ 
+ ### Build partially-linked object file
+-PARTIALLD=ld -r $(NATIVECCLINKOPTS)
++PARTIALLD=i686-w64-mingw32-ld -r $(NATIVECCLINKOPTS)
+ PACKLD=$(PARTIALLD)
+ 
+ ############# Configuration for the contributed libraries
 diff -Naur a/utils/ccomp.ml b/utils/ccomp.ml
 --- a/utils/ccomp.ml	2005-03-24 17:20:54.000000000 +0000
 +++ b/utils/ccomp.ml	2016-06-15 21:40:01.807812100 +0100

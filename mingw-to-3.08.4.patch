@@ -1,0 +1,85 @@
+diff -Naur a/asmcomp/i386/proc.ml b/asmcomp/i386/proc.ml
+--- a/asmcomp/i386/proc.ml	2003-06-15 10:58:31.000000000 +0100
++++ b/asmcomp/i386/proc.ml	2016-07-04 20:07:29.206051700 +0100
+@@ -170,7 +170,7 @@
+ (* Calling the assembler *)
+ 
+ let assemble_file infile outfile =
+-  Ccomp.command ("as -o " ^ Filename.quote outfile ^ " " ^ Filename.quote infile)
++  Ccomp.command (Printf.sprintf "%sas -o %s %s" (if Config.system = "mingw" then "i686-w64-mingw32-" else "") (Filename.quote outfile) (Filename.quote infile))
+ 
+ open Clflags;;
+ open Config;;
+diff -Naur a/config/Makefile.mingw b/config/Makefile.mingw
+--- a/config/Makefile.mingw	2004-04-01 14:08:56.000000000 +0100
++++ b/config/Makefile.mingw	2016-07-04 20:08:14.794373600 +0100
+@@ -45,7 +45,7 @@
+ ########## Configuration for the bytecode compiler
+ 
+ ### Which C compiler to use for the bytecode interpreter.
+-BYTECC=gcc -mno-cygwin
++BYTECC=i686-w64-mingw32-gcc
+ 
+ ### Additional compile-time options for $(BYTECC).  (For static linking.)
+ BYTECCCOMPOPTS=-O -mms-bitfields -Wall -Wno-unused
+@@ -64,16 +64,16 @@
+ CPP=$(BYTECC) -E
+ 
+ ### How to build a DLL
+-MKDLL=$(BYTECC) -shared -o $(1) -Wl,--out-implib,$(2) $(3)
++MKDLL=$(BYTECC) -static-libgcc -shared -o $(1) -Wl,--out-implib,$(2) $(3)
+ 
+ ### How to build a static library
+-MKLIB=rm -f $(1); ar rcs $(1) $(2)
++MKLIB=rm -f $(1); i686-w64-mingw32-ar rcs $(1) $(2)
+ 
+ ### Canonicalize the name of a system library
+ SYSLIB=-l$(1)
+ 
+ ### The ranlib command
+-RANLIBCMD=ranlib
++RANLIBCMD=i686-w64-mingw32-ranlib
+ 
+ ############# Configuration for the native-code compiler
+ 
+@@ -96,12 +96,12 @@
+ NATIVECCLINKOPTS=
+ 
+ ### Build partially-linked object file
+-PARTIALLD=ld -r $(NATIVECCLINKOPTS)
++PARTIALLD=i686-w64-mingw32-ld -r $(NATIVECCLINKOPTS)
+ PACKLD=$(PARTIALLD)
+ 
+ ### nm and objcopy from GNU binutils
+-BINUTILS_NM=nm
+-BINUTILS_OBJCOPY=objcopy
++BINUTILS_NM=i686-w64-mingw32-nm
++BINUTILS_OBJCOPY=i686-w64-mingw32-objcopy
+ 
+ ############# Configuration for the contributed libraries
+ 
+diff -Naur a/utils/ccomp.ml b/utils/ccomp.ml
+--- a/utils/ccomp.ml	2005-02-02 15:39:40.000000000 +0000
++++ b/utils/ccomp.ml	2016-07-04 20:07:29.223067200 +0100
+@@ -80,7 +80,8 @@
+                              quoted_archive (quote_files file_list))
+   | _ ->
+       let r1 =
+-        command(Printf.sprintf "ar rc %s %s"
++        command(Printf.sprintf "%sar rc %s %s"
++                (if Config.system = "mingw" then "i686-w64-mingw32-" else "")
+                 quoted_archive (quote_files file_list)) in
+       if r1 <> 0 || String.length Config.ranlib = 0
+       then r1
+diff -Naur a/win32caml/Makefile b/win32caml/Makefile
+--- a/win32caml/Makefile	2004-06-17 08:33:44.000000000 +0100
++++ b/win32caml/Makefile	2016-07-04 20:07:29.223067200 +0100
+@@ -36,7 +36,7 @@
+ 	rm -f ocaml.res
+ endif
+ ifeq ($(TOOLCHAIN),mingw)
+-	windres -i ocaml.rc -o $@
++	i686-w64-mingw32-windres -i ocaml.rc -o $@
+ endif
+ 
+ $(OBJS): inria.h inriares.h history.h editbuffer.h
