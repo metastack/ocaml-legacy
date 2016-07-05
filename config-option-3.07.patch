@@ -1,0 +1,271 @@
+From 6c9bac39d4ec595237e805530717ecff3cad8085 Mon Sep 17 00:00:00 2001
+From: Damien Doligez <damien.doligez-inria.fr>
+Date: Mon, 9 May 2005 13:39:17 +0000
+Subject: [PATCH] ajout de l'option -config (suggestion de Gerd Stolpmann)
+
+git-svn-id: http://caml.inria.fr/svn/ocaml/trunk@6865 f963ae5c-01c2-4b8c-9fe0-0dff7051ff02
+---
+ Makefile               |  1 +
+ Makefile.nt            |  1 +
+ asmcomp/asmpackager.ml |  2 +-
+ configure              |  4 ++++
+ driver/main.ml         |  6 ++++++
+ driver/main_args.ml    |  9 +++++++--
+ driver/main_args.mli   |  1 +
+ driver/optmain.ml      | 10 +++++++++-
+ stdlib/sys.ml          |  2 +-
+ tools/ocamlcp.ml       |  1 +
+ utils/config.mli       |  7 +++++++
+ utils/config.mlp       | 40 +++++++++++++++++++++++++++++++++++++++-
+ 12 files changed, 78 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 1ee4009..1389ca6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -338,6 +338,7 @@ utils/config.ml: utils/config.mlp config/Makefile
+             -e 's|%%EXT_ASM%%|.s|' \
+             -e 's|%%EXT_LIB%%|.a|' \
+             -e 's|%%EXT_DLL%%|.so|' \
++            -e 's|%%SYSTHREAD_SUPPORT%%|$(SYSTHREAD_SUPPORT)|' \
+             utils/config.mlp > utils/config.ml
+ 	@chmod -w utils/config.ml
+ 
+diff --git a/Makefile.nt b/Makefile.nt
+index c27e55a..0c44180 100644
+--- a/Makefile.nt
++++ b/Makefile.nt
+@@ -309,6 +309,7 @@ utils/config.ml: utils/config.mlp config/Makefile
+             -e "s|%%EXT_ASM%%|.$(S)|" \
+             -e "s|%%EXT_LIB%%|.$(A)|" \
+             -e "s|%%EXT_DLL%%|.dll|" \
++            -e "s|%%SYSTHREAD_SUPPORT%%|true|" \
+             utils/config.mlp > utils/config.ml
+ 	@chmod -w utils/config.ml
+ 
+diff --git a/asmcomp/asmpackager.ml b/asmcomp/asmpackager.ml
+index 235fdd1..8b7c153 100644
+--- a/asmcomp/asmpackager.ml
++++ b/asmcomp/asmpackager.ml
+@@ -344,7 +344,7 @@ let package_object_files ppf files targetcmx
+ (* The entry point *)
+ 
+ let package_files ppf files targetcmx =
+-  if Config.binutils_objcopy = "" || Config.binutils_nm = ""
++  if not Config.pack_option_supported
+   then raise (Error No_binutils);
+   let files =
+     List.map
+diff --git a/configure b/configure
+index 50026df..004cb51 100755
+--- a/configure
++++ b/configure
+@@ -1073,6 +1073,8 @@ echo "BNG_ASM_LEVEL=$bng_asm_level" >> Makefile
+ 
+ # Determine if the POSIX threads library is supported
+ 
++systhread_support=false
++
+ if test "$pthread_wanted" = "yes"; then
+   case "$host" in
+     *-*-solaris*)  pthread_link="-lpthread -lposix4";;
+@@ -1082,6 +1084,7 @@ if test "$pthread_wanted" = "yes"; then
+ esac
+ if ./hasgot -i pthread.h $pthread_link pthread_self; then
+   echo "POSIX threads library supported."
++  systhread_support=true
+   otherlibraries="$otherlibraries systhreads"
+   bytecccompopts="$bytecccompopts -D_REENTRANT"
+   nativecccompopts="$nativecccompopts -D_REENTRANT"
+@@ -1461,6 +1464,7 @@ echo "DYNLINKOPTS=$dllib" >> Makefile
+ echo "OTHERLIBRARIES=$otherlibraries" >> Makefile
+ echo "DEBUGGER=$debugger" >> Makefile
+ echo "CC_PROFILE=$cc_profile" >> Makefile
++echo "SYSTHREAD_SUPPORT=$systhread_support" >>Makefile
+ 
+ rm -f tst hasgot.c
+ rm -f ../m.h ../s.h ../Makefile
+diff --git a/driver/main.ml b/driver/main.ml
+index 12c5305..5782869 100644
+--- a/driver/main.ml
++++ b/driver/main.ml
+@@ -80,6 +80,11 @@ let anonymous = process_file Format.err_formatter;;
+ let impl = process_implementation_file Format.err_formatter;;
+ let intf = process_interface_file Format.err_formatter;;
+ 
++let show_config () =
++  Config.print_config stdout;
++  exit 0;
++;;
++
+ module Options = Main_args.Make_options (struct
+   let set r () = r := true
+   let unset r () = r := false
+@@ -88,6 +93,7 @@ module Options = Main_args.Make_options (struct
+   let _cc s = c_compiler := s; c_linker := s
+   let _cclib s = ccobjs := Misc.rev_split_words s @ !ccobjs
+   let _ccopt s = ccopts := s :: !ccopts
++  let _config = show_config
+   let _custom = set custom_runtime
+   let _dllib s = dllibs := Misc.rev_split_words s @ !dllibs
+   let _dllpath s = dllpaths := !dllpaths @ [s]
+diff --git a/driver/main_args.ml b/driver/main_args.ml
+index c84889c..4c7ba7c 100644
+--- a/driver/main_args.ml
++++ b/driver/main_args.ml
+@@ -19,6 +19,7 @@ module Make_options (F :
+      val _cc : string -> unit
+      val _cclib : string -> unit
+      val _ccopt : string -> unit
++     val _config : unit -> unit
+      val _custom : unit -> unit
+      val _dllib : string -> unit
+      val _dllpath : string -> unit
+@@ -70,6 +71,8 @@ struct
+     "-cclib", Arg.String F._cclib, "<opt>  Pass option <opt> to the C linker";
+     "-ccopt", Arg.String F._ccopt,
+            "<opt>  Pass option <opt> to the C compiler and linker";
++    "-config", Arg.Unit F._config,
++           " print configuration values and exit";
+     "-custom", Arg.Unit F._custom, " Link in custom mode";
+     "-dllib", Arg.String F._dllib,
+            "<lib>  Use the dynamically-loaded library <lib>";
+diff --git a/driver/main_args.mli b/driver/main_args.mli
+index 1233b51..b8afff0 100644
+--- a/driver/main_args.mli
++++ b/driver/main_args.mli
+@@ -19,6 +19,7 @@ module Make_options (F :
+       val _cc : string -> unit
+       val _cclib : string -> unit
+       val _ccopt : string -> unit
++      val _config : unit -> unit
+       val _custom : unit -> unit
+       val _dllib : string -> unit
+       val _dllpath : string -> unit
+diff --git a/driver/optmain.ml b/driver/optmain.ml
+index 786ade7..9003814 100644
+--- a/driver/optmain.ml
++++ b/driver/optmain.ml
+@@ -84,6 +84,11 @@ let default_output = function
+ 
+ let usage = "Usage: ocamlopt <options> <files>\nOptions are:"
+ 
++let show_config () =
++  Config.print_config stdout;
++  exit 0;
++;;
++
+ let main () =
+   native_code := true;
+   c_compiler := Config.native_c_compiler;
+@@ -102,6 +107,8 @@ let main () =
+              "<opt>  Pass option <opt> to the C compiler and linker";
+        "-compact", Arg.Clear optimize_for_speed,
+              " Optimize code size rather than speed";
++       "-config", Arg.Unit show_config,
++             " print configuration values and exit";
+        "-dtypes", Arg.Set save_types,
+              " Save type information in <filename>.annot";
+        "-i", Arg.Unit (fun () -> print_types := true; compile_only := true),
+diff --git a/tools/ocamlcp.ml b/tools/ocamlcp.ml
+index b1a2f72..a9d7788 100644
+--- a/tools/ocamlcp.ml
++++ b/tools/ocamlcp.ml
+@@ -47,6 +47,7 @@ module Options = Main_args.Make_options (struct
+   let _cc s = option_with_arg "-cc" s
+   let _cclib s = option_with_arg "-cclib" s
+   let _ccopt s = option_with_arg "-ccopt" s
++  let _config = option "-config"
+   let _custom = option "-custom"
+   let _dllib = option_with_arg "-dllib"
+   let _dllpath = option_with_arg "-dllpath"
+diff --git a/utils/config.mli b/utils/config.mli
+index a53fe24..dc960f7 100644
+--- a/utils/config.mli
++++ b/utils/config.mli
+@@ -109,3 +109,10 @@ val ext_dll: string
+ val default_executable_name: string
+         (* Name of executable produced by linking if none is given with -o,
+            e.g. [a.out] under Unix. *)
++
++val pack_option_supported : bool
++        (* Whether option -pack is implemented *)
++val systhread_supported : bool
++        (* Whether the system thread library is implemented *)
++
++val print_config : out_channel -> unit;;
+diff -Naur a/utils/config.mlp b/utils/config.mlp
+--- a/utils/config.mlp	2003-07-03 16:13:23.000000000 +0100
++++ b/utils/config.mlp	2016-07-05 14:13:19.955103700 +0100
+@@ -15,6 +15,8 @@
+ (* The main OCaml version string has moved to stdlib/sys.ml *)
+ let version = Sys.ocaml_version
+ 
++let standard_library_default = "%%LIBDIR%%"
++
+ let standard_library =
+   try
+     Sys.getenv "OCAMLLIB"
+@@ -22,7 +24,7 @@
+   try
+     Sys.getenv "CAMLLIB"
+   with Not_found ->
+-    "%%LIBDIR%%"
++    standard_library_default
+ 
+ let standard_runtime = "%%BYTERUN%%"
+ let ccomp_type = "%%CCOMPTYPE%%"
+@@ -70,8 +72,45 @@
+ let ext_lib = "%%EXT_LIB%%"
+ let ext_dll = "%%EXT_DLL%%"
+ 
++let pack_option_supported = binutils_objcopy <> "" && binutils_nm <> "";;
++
+ let default_executable_name =
+   match Sys.os_type with
+     "Unix" -> "a.out"
+   | "Win32" | "Cygwin" -> "camlprog.exe"
+   | _ -> "camlprog"
++
++let systhread_supported = %%SYSTHREAD_SUPPORT%%;;
++
++let print_config oc =
++  let p name valu = Printf.fprintf oc "%s: %s\n" name valu in
++  let p_bool name valu = Printf.fprintf oc "%s: %B\n" name valu in
++  p "version" version;
++  p "standard_library_default" standard_library_default;
++  p "standard_library" standard_library;
++  p "standard_runtime" standard_runtime;
++  p "ccomp_type" ccomp_type;
++  p "bytecomp_c_compiler" bytecomp_c_compiler;
++  p "bytecomp_c_linker" bytecomp_c_linker;
++  p "bytecomp_c_libraries" bytecomp_c_libraries;
++  p "native_c_compiler" native_c_compiler;
++  p "native_c_linker" native_c_linker;
++  p "native_c_libraries" native_c_libraries;
++  p "native_partial_linker" native_partial_linker;
++  p "ranlib" ranlib;
++  p "binutils_nm" binutils_nm;
++  p "binutils_objcopy" binutils_objcopy;
++  p_bool "pack_option_supported" pack_option_supported;
++  p "cc_profile" cc_profile;
++  p "architecture" architecture;
++  p "model" model;
++  p "system" system;
++  p "ext_obj" ext_obj;
++  p "ext_asm" ext_asm;
++  p "ext_lib" ext_lib;
++  p "ext_dll" ext_dll;
++  p "os_type" Sys.os_type;
++  p "default_executable_name" default_executable_name;
++  p_bool "systhread_supported" systhread_supported;
++  flush oc;
++;;
+-- 
+2.8.3.windows.1
+
+diff -Naur a/patches/config-option.patched b/patches/config-option.patched
+--- a/patches/config-option.patched	1970-01-01 01:00:00.000000000 +0100
++++ b/patches/config-option.patched	2016-07-05 13:54:02.412191200 +0100
+@@ -0,0 +1 @@
++Applied

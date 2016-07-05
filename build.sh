@@ -58,7 +58,7 @@ if [ $VER -lt 3080 ] ; then
   mv ocaml-3.07 ../$DIR
   cd ..
   rmdir $TDIR
-  PATCHES="ocamldoc-build PR3485 PR4614 PR4700 PR5011 ocamldoc-3.07 mingw-to-3.08.4 msvc-to-3.08.4"
+  PATCHES="ocamldoc-build config-option-3.07 cc-profile PR3485 PR4614 PR4700 PR5011 ocamldoc-3.07 mingw-to-3.08.4 msvc-to-3.08.4"
 else
   DIR=ocaml-$1
 
@@ -85,9 +85,9 @@ else
   elif [ $VER -gt 3084 ] ; then # 3.09.x
     PATCHES="ocamldoc-build cc-profile PR4614 PR4700 PR5011 mingw-to-3.09.3"
   elif [ $VER -gt 3082 ] ; then # 3.08.3 - 3.08.4
-    PATCHES="ocamldoc-build PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4"
+    PATCHES="ocamldoc-build config-option-3.08 cc-profile PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4"
   else # 3.08.0-3.08.3
-    PATCHES="ocamldoc-build PR3485 PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4"
+    PATCHES="ocamldoc-build config-option-3.08 cc-profile PR3485 PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4"
   fi
 fi
 

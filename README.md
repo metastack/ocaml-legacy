@@ -4,6 +4,10 @@ This repository contains patches necessary for compiling the native Windows vers
 
 Additionally, a couple of utility shell scripts are provided for doing bulk-builds and applying the patches. In order for these scripts to function correctly, the tarballs for the required version(s) of OCaml must be downloaded from [Inria](http://caml.inria.fr/pub/distrib) (and also the two official `.diffs` patch files for OCaml 3.07+1 and 3.07+2).
 
+## Features
+
+`config-option` (OCaml 3.07--3.08.4): back-ports the `-config` option added in 3.09.0. The patch is compatible with GPR465 and uses the identifier `config-option`.
+
 ## Patches
 
 The following patches address build system or environment changes which have occurred since these versions of OCaml were originally released:
