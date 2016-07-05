@@ -34,7 +34,7 @@ The following patches address build system or environment changes which have occ
 
 The following patches relate to [Mantis](http://caml.inria.fr/mantis) PRs:
 
-[`PR3485`](http://caml.inria.fr/mantis/view.php?id=3485) (OCaml 3.07--3.08.2): back-ports a Cygwin-related change made in OCaml 3.08.3.
+[`PR3485`](http://caml.inria.fr/mantis/view.php?id=3485) (OCaml 3.07--3.08.3): back-ports a Cygwin-related change made in OCaml 3.08.4.
 
 [`PR4614`](http://caml.inria.fr/mantis/view.php?id=4614) (OCaml 3.07--3.10.x): back-ports commits [ad3ca0](https://github.com/ocaml/ocaml/commit/ad3ca0) and [ff88bb](https://github.com/ocaml/ocaml/commit/ff88bb) to allow building with Tcl/Tk 8.5 to OCaml 3.11.0 when support was officially added.
 
