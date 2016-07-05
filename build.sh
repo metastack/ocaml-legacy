@@ -84,7 +84,7 @@ else
     PATCHES="ocamldoc-build PR4700 PR5011-3.11 mingw-to-3.12.1 msvc64-3.11 tcl-tk-amd64-3.11-84 gpr#465-3.09.0+"
   elif [ $VER -gt 3093 ] ; then # 3.10.x
     # NB cc-profile must be applied after GPR465
-    PATCHES="ocamldoc-build PR4614 PR4700 PR5011 mingw-to-3.10.2 msvc64-3.10 tcl-tk-amd64-3.10 gpr#465-3.09.0+ cc-profile"
+    PATCHES="ocamldoc-build PR4614 PR4575 PR4700 PR5011 mingw-to-3.10.2 msvc64-3.10 tcl-tk-amd64-3.10 gpr#465-3.09.0+ cc-profile"
   elif [ $VER -gt 3084 ] ; then # 3.09.x
     PATCHES="ocamldoc-build cc-profile PR4614 PR4700 PR5011 mingw-to-3.09.3 gpr#465-3.09.0+"
   elif [ $VER -gt 3082 ] ; then # 3.08.3 - 3.08.4
