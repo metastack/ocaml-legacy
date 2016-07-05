@@ -12,6 +12,8 @@ The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pu
 
 [`GPR465`](https://github.com/ocaml/ocaml/pull/465) (OCaml 3.07--): adds a `patches` to the output of `ocamlc -config` for noting changes to the compiler. The patches themselves are from the pull request. The patch combines with the `config-option` patch to support 3.07 and 3.08 as well.
 
+[`GPR658`](https://github.com/ocaml/ocaml/pull/658) (OCaml 3.07--): ensures that paths are always displayed using backslashes (from `ocamlc -config` and `ocamlbuild -where`).
+
 [`PR4575`](http://caml.inria.fr/mantis/view.php?id=4575) (OCaml 3.10.x): back-ports a fix to the output of `ocamlbuild -where` as a `\r` character was included in the output.
 
 ## Patches
