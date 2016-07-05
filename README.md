@@ -10,6 +10,8 @@ The following patches address build system or environment changes which have occ
 
 `mingw` (OCaml 3.07--3.12.1): `config/Makefile.mingw` used the old `-mno-cygin` method of invoking the MinGW version of GCC, which is no longer support in Cygwin.
 
+`msvc` (OCaml 3.07--3.08.4): `config/Makefile.msvc` uses the Cygwin ld, nm and objcopy commands. This optional patch switches them to use the i686-w64-mingw32- prefixed versions instead.
+
 `msvc64` (OCaml 3.10.x and 3.11.x): `config/Makefile.msvc` includes a library only required in the pre-release version of the 64-bit Windows SDK.
 
 `ocamldoc-3.07` (OCaml 3.07): missing spaces in `ocamldoc/Makefile.nt` (it's actually not clear how this ever functioned, even in an old version of make!).
