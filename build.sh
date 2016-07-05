@@ -81,9 +81,9 @@ else
   elif [ $VER -gt 3102 ] ; then # 3.11.0 & 3.11.1
     PATCHES="ocamldoc-build PR4700 PR5011-3.11 mingw-to-3.12.1 msvc64-3.11 tcl-tk-amd64-3.11-84"
   elif [ $VER -gt 3093 ] ; then # 3.10.x
-    PATCHES="ocamldoc-build PR4614 PR4700 PR5011 mingw-to-3.10.2 msvc64-3.10 tcl-tk-amd64-3.10"
+    PATCHES="ocamldoc-build cc-profile PR4614 PR4700 PR5011 mingw-to-3.10.2 msvc64-3.10 tcl-tk-amd64-3.10"
   elif [ $VER -gt 3084 ] ; then # 3.09.x
-    PATCHES="ocamldoc-build PR4614 PR4700 PR5011 mingw-to-3.09.3"
+    PATCHES="ocamldoc-build cc-profile PR4614 PR4700 PR5011 mingw-to-3.09.3"
   elif [ $VER -gt 3082 ] ; then # 3.08.3 - 3.08.4
     PATCHES="ocamldoc-build PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4"
   else # 3.08.0-3.08.3

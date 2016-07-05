@@ -1,0 +1,7 @@
+diff -Nar -U 2 a/Makefile.nt b/Makefile.nt
+--- a/Makefile.nt	2003-09-25 09:19:17.000000000 +0100
++++ b/Makefile.nt	2016-07-04 09:13:27.421963100 +0100
+@@ -310,4 +310,5 @@
+             -e "s|%%EXT_LIB%%|.$(A)|" \
+             -e "s|%%EXT_DLL%%|.dll|" \
++            -e "s|%%CC_PROFILE%%||" \

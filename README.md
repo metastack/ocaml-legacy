@@ -8,6 +8,8 @@ Additionally, a couple of utility shell scripts are provided for doing bulk-buil
 
 The following patches address build system or environment changes which have occurred since these versions of OCaml were originally released:
 
+`cc-profile` (OCaml 3.09.0--3.10.2): `CC_PROFILE` was not substituted when building `utils/config.ml` resulting in harmless, though invalid, output in `ocamlc -config`.
+
 `mingw` (OCaml 3.07--3.12.1): `config/Makefile.mingw` used the old `-mno-cygin` method of invoking the MinGW version of GCC, which is no longer support in Cygwin.
 
 `msvc` (OCaml 3.07--3.08.4): `config/Makefile.msvc` uses the Cygwin ld, nm and objcopy commands. This optional patch switches them to use the i686-w64-mingw32- prefixed versions instead.
@@ -24,7 +26,7 @@ The following patches relate to [Mantis](http://caml.inria.fr/mantis) PRs:
 
 [`PR3485`](http://caml.inria.fr/mantis/view.php?id=3485) (OCaml 3.07--3.08.2): back-ports a Cygwin-related change made in OCaml 3.08.3.
 
-[`PR4614`](http://caml.inria.fr/mantis/view.php?id=4614) (OCaml 3.07--3.10.x): Back-ports commits [ad3ca0](https://github.com/ocaml/ocaml/commit/ad3ca0) and [ff88bb](https://github.com/ocaml/ocaml/commit/ff88bb) to allow building with Tcl/Tk 8.5 to OCaml 3.11.0 when support was officially added.
+[`PR4614`](http://caml.inria.fr/mantis/view.php?id=4614) (OCaml 3.07--3.10.x): back-ports commits [ad3ca0](https://github.com/ocaml/ocaml/commit/ad3ca0) and [ff88bb](https://github.com/ocaml/ocaml/commit/ff88bb) to allow building with Tcl/Tk 8.5 to OCaml 3.11.0 when support was officially added.
 
 [`PR4700`](http://caml.inria.fr/mantis/view.php?id=4700) (OCaml 3.07--4.01.0): disables the tkanim library when building with Tcl/Tk 8.5 or later.
 
