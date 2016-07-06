@@ -1,0 +1,28 @@
+From fd07b468832805e8f249bf2fcdd4f577502bca1c Mon Sep 17 00:00:00 2001
+From: Damien Doligez <damien.doligez-inria.fr>
+Date: Thu, 17 Jan 2008 15:57:23 +0000
+Subject: [PATCH] PR#4480 remove inadvertent gnu-ism
+
+git-svn-id: http://caml.inria.fr/svn/ocaml/version/3.10@8775 f963ae5c-01c2-4b8c-9fe0-0dff7051ff02
+---
+ byterun/finalise.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/byterun/finalise.c b/byterun/finalise.c
+index e407894..5a9c0c0 100644
+--- a/byterun/finalise.c
++++ b/byterun/finalise.c
+@@ -85,8 +85,9 @@ void caml_final_update (void)
+       Assert (Is_in_heap (final_table[i].val));
+       if (Is_white_val (final_table[i].val)){
+         if (Tag_val (final_table[i].val) == Forward_tag){
++          value fv;
+           Assert (final_table[i].offset == 0);
+-          value fv = Forward_val (final_table[i].val);
++          fv = Forward_val (final_table[i].val);
+           if (Is_block (fv) && (Is_young (fv) || Is_in_heap (fv))
+               && (Tag_val (fv) == Forward_tag || Tag_val (fv) == Lazy_tag
+                   || Tag_val (fv) == Double_tag)){
+-- 
+2.6.1.windows.1
+
