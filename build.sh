@@ -91,7 +91,7 @@ else
     PATCHES="ocamldoc-build cc-profile PR4614 PR4700 PR5011 mingw-to-3.09.3 gpr#465-3.09.0+ GPR658-to-3.09.3"
   elif [ $VER -gt 3082 ] ; then # 3.08.3 - 3.08.4
     PATCHES="ocamldoc-build config-option-3.08 cc-profile PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3"
-  else # 3.08.0-3.08.3
+  else # 3.08.0-3.08.2
     PATCHES="ocamldoc-build config-option-3.08 cc-profile PR3485 PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3"
   fi
 fi
