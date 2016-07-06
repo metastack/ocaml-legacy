@@ -16,6 +16,8 @@ The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pu
 
 [`PR4575`](http://caml.inria.fr/mantis/view.php?id=4575) (OCaml 3.10.x): back-ports a fix to the output of `ocamlbuild -where` as a `\r` character was included in the output.
 
+[`PR4847`](http://caml.inria.fr/mantis/view.pho?id=4847) (OCaml 3.10.0--3.11.1): back-ports a fix to `ocamlc -output-obj` for msvc64.
+
 ## Patches
 
 The following patches address build system or environment changes which have occurred since these versions of OCaml were originally released:
