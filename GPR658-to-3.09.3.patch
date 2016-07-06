@@ -7,8 +7,8 @@ diff -Naur a/Makefile.nt b/Makefile.nt
  	cd byterun ; $(MAKEREC) install
 -	echo "$(STUBLIBDIR)" > $(LIBDIR)/ld.conf
 -	echo "$(LIBDIR)" >> $(LIBDIR)/ld.conf
-+	echo "$(shell echo $(STUBLIBDIR)|sed -e 's/\//\\\\/g')"| sed -e "s/$$/\r/" > ld.conf
-+	echo "$(shell echo $(LIBDIR)| sed -e 's/\//\\\\/g')"| sed -e "s/$$/\r/"  >> ld.conf
++	echo "$(shell echo $(STUBLIBDIR)|sed -e 's/\//\\\\/g')"| sed -e "s/$$/\r/" > $(LIBDIR)/ld.conf
++	echo "$(shell echo $(LIBDIR)| sed -e 's/\//\\\\/g')"| sed -e "s/$$/\r/"  >> $(LIBDIR)/ld.conf
  	cp ocamlc $(BINDIR)/ocamlc.exe
  	cp ocaml $(BINDIR)/ocaml.exe
  	cd stdlib ; $(MAKEREC) install
