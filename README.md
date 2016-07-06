@@ -20,7 +20,7 @@ The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pu
 
 The following patches address build system or environment changes which have occurred since these versions of OCaml were originally released:
 
-`cc-profile` (OCaml 3.09.0--3.10.2): `CC_PROFILE` was not substituted when building `utils/config.ml` resulting in harmless, though invalid, output in `ocamlc -config`.
+`cc-profile` (OCaml 3.07--3.10.2): `CC_PROFILE` was not substituted when building `utils/config.ml` resulting in harmless, though invalid, output in `ocamlc -config`.
 
 `mingw` (OCaml 3.07--3.12.1): `config/Makefile.mingw` used the old `-mno-cygin` method of invoking the MinGW version of GCC, which is no longer support in Cygwin.
 
