@@ -8,6 +8,8 @@ Additionally, a couple of utility shell scripts are provided for doing bulk-buil
 
 `config-option` (OCaml 3.07--3.08.4): back-ports the `-config` option added in 3.09.0. The patch is compatible with GPR465 and uses the identifier `config-option`.
 
+`win32-graph` (OCaml 3.08.4): back-ports commit [7a7a87](https://github.com/ocaml/ocaml/commit/7a7a87) from 3.09.0, fixing the graphics library for Windows.
+
 The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pulls) and [Mantis](http://caml.inria.fr/mantis) PRs:
 
 [`GPR465`](https://github.com/ocaml/ocaml/pull/465) (OCaml 3.07--): adds a `patches` to the output of `ocamlc -config` for noting changes to the compiler. The patches themselves are from the pull request. The patch combines with the `config-option` patch to support 3.07 and 3.08 as well.

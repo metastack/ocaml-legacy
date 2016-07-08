@@ -1,0 +1,31 @@
+From 7a7a87486148ed3f941329e5a9b228f456a9e973 Mon Sep 17 00:00:00 2001
+From: Xavier Leroy <xavier.leroy@inria.fr>
+Date: Thu, 27 Oct 2005 09:02:59 +0000
+Subject: [PATCH] Typo
+
+git-svn-id: http://caml.inria.fr/svn/ocaml/version/3.09@7189 f963ae5c-01c2-4b8c-9fe0-0dff7051ff02
+---
+ otherlibs/win32graph/open.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/otherlibs/win32graph/open.c b/otherlibs/win32graph/open.c
+index 63ae634..6086626 100644
+--- a/otherlibs/win32graph/open.c
++++ b/otherlibs/win32graph/open.c
+@@ -303,7 +303,7 @@ CAMLprim value caml_gr_size_y(void)
+ 
+ CAMLprim value caml_gr_resize_window (value vx, value vy)
+ {
+-  caml_gr_check_open ();
++  gr_check_open ();
+ 
+   /* FIXME TODO implement this function... */
+ 
+-- 
+2.6.2.windows.1
+
+diff -Naur a/patches/win32-graph.patched b/patches/win32-graph.patched
+--- a/patches/win32-graph.patched	1970-01-01 01:00:00.000000000 +0100
++++ b/patches/win32-graph.patched	2016-07-05 13:54:02.412191200 +0100
+@@ -0,0 +1 @@
++Applied
