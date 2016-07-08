@@ -34,6 +34,8 @@ The following patches address build system or environment changes which have occ
 
 `ocamldoc-build` (OCaml 3.07--4.00.0): fixes a build system problem caused by a French accent in `ocamldoc/odoc_messages.ml` (the message was translated into English for OCaml 4.01.0 which eliminated the issue).
 
+`output-obj` (OCaml 3.07): back-ports a small part of [e2b313](https://github.com/ocaml/ocaml/commit/e2b313) which suppresses a warning emitted by GCC for `ocamlc -output-obj`
+
 `tcl-tk-amd64` (OCaml 3.10.x--4.01.0): at the time of the release of 64-bit OCaml for Windows (using the Microsoft C Compiler for 3.10.0 and also GCC for 4.00.0) there was not a readily available 64-bit distribution of Tcl/Tk for Windows, so labltk was disabled for these ports. However, it has always worked and these patches enable the build system to build the 64-bit labltk for all versions.
 
 The following patches relate to [Mantis](http://caml.inria.fr/mantis) PRs:

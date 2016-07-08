@@ -1,0 +1,32 @@
+From e2b313a0556afc6c9d66400864aaea4347a0490f Mon Sep 17 00:00:00 2001
+From: Xavier Leroy <xavier.leroy@inria.fr>
+Date: Sun, 22 Feb 2004 15:07:51 +0000
+Subject: [PATCH] Rendre ocamlc -output-obj compatible avec Dynlink et le
+ toplevel
+
+git-svn-id: http://caml.inria.fr/svn/ocaml/trunk@6130 f963ae5c-01c2-4b8c-9fe0-0dff7051ff02
+---
+ bytecomp/bytelink.ml       |  26 ++++++++++++---
+ 1 file changed, 176 insertions(+), 69 deletions(-)
+
+diff --git a/bytecomp/bytelink.ml b/bytecomp/bytelink.ml
+index aa8e4e7..66f8446 100644
+--- a/bytecomp/bytelink.ml
++++ b/bytecomp/bytelink.ml
+@@ -379,6 +379,13 @@ let link_bytecode_as_c tolink outfile =
+   let outchan = open_out outfile in
+   try
+     (* The bytecode *)
++    output_string outchan "#include <caml/mlvalues.h>\n";
++    output_string outchan "\
++CAMLextern void caml_startup_code(
++           code_t code, asize_t code_size,
++           char *data,
++           
++           char **argv);\n";
+     output_string outchan "static int caml_code[] = {\n";
+     Symtable.init();
+     Consistbl.clear crc_interfaces;
+-- 
+2.6.2.windows.1
+
