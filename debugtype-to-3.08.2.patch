@@ -1,0 +1,49 @@
+From 34804ac82a88ec8a6c86455eb3d57d35522ca405 Mon Sep 17 00:00:00 2001
+From: Xavier Leroy <xavier.leroy@inria.fr>
+Date: Thu, 27 Jul 2006 16:10:37 +0000
+Subject: [PATCH] Suppression de /debugtype, obsolete
+
+git-svn-id: http://caml.inria.fr/svn/ocaml/version/3.09@7544 f963ae5c-01c2-4b8c-9fe0-0dff7051ff02
+---
+ config/Makefile.msvc | 4 ++--
+ utils/ccomp.ml       | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/config/Makefile.msvc b/config/Makefile.msvc
+index 421fd91..6399126 100644
+--- a/config/Makefile.msvc
++++ b/config/Makefile.msvc
+@@ -67,7 +67,7 @@ CPP=cl /nologo /EP
+ MKDLL=link /nologo /dll /out:$(1) /implib:$(2) $(3)
+ 
+ ### How to build a static library
+-MKLIB=lib /nologo /debugtype:CV /out:$(1) $(2)
++MKLIB=lib /nologo /out:$(1) $(2)
+ 
+ ### Canonicalize the name of a system library
+ SYSLIB=$(1).lib
+@@ -96,7 +96,7 @@ NATIVECCCOMPOPTS=/Ox /MT
+ NATIVECCLINKOPTS=/MT
+ 
+ ### Build partially-linked object file
+-PARTIALLD=lib /nologo /debugtype:cv
++PARTIALLD=lib /nologo
+ PACKLD=ld -r --oformat pe-i386
+ 
+ ############# Configuration for the contributed libraries
+diff --git a/utils/ccomp.ml b/utils/ccomp.ml
+index 966011e..d6906a7 100644
+--- a/utils/ccomp.ml
++++ b/utils/ccomp.ml
+@@ -76,7 +76,7 @@ let create_archive archive file_list =
+   let quoted_archive = Filename.quote archive in
+   match Config.ccomp_type with
+     "msvc" ->
+-      command(Printf.sprintf "lib /nologo /debugtype:cv /out:%s %s"
++      command(Printf.sprintf "lib /nologo /out:%s %s"
+                              quoted_archive (quote_files file_list))
+   | _ ->
+       let r1 =
+-- 
+2.8.3.windows.1
+

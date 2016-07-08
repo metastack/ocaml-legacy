@@ -26,6 +26,8 @@ The following patches address build system or environment changes which have occ
 
 `cc-profile` (OCaml 3.07--3.10.2): `CC_PROFILE` was not substituted when building `utils/config.ml` resulting in harmless, though invalid, output in `ocamlc -config`.
 
+`debugtype` (OCaml 3.07--3.09.3): back-ports commits [ac86cc](https://github.com/ocaml/ocaml/commit/ac86cc) and [536dfe](https://github.com/ocaml/ocaml/commit/536dfe) to remove the `/debugtype:cv` which ceased to be support in Visual Studio .NET 2002.
+
 `mingw` (OCaml 3.07--3.12.1): `config/Makefile.mingw` used the old `-mno-cygin` method of invoking the MinGW version of GCC, which is no longer support in Cygwin.
 
 `msvc` (OCaml 3.07--3.08.4): `config/Makefile.msvc` uses the Cygwin ld, nm and objcopy commands. This optional patch switches them to use the i686-w64-mingw32- prefixed versions instead.

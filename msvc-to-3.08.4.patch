@@ -1,10 +1,10 @@
 diff -Naur a/config/Makefile.msvc b/config/Makefile.msvc
---- a/config/Makefile.msvc	2005-02-02 15:39:40.000000000 +0000
-+++ b/config/Makefile.msvc	2016-07-04 20:10:58.515076700 +0100
+--- a/config/Makefile.msvc	2016-07-08 15:42:56.156715400 +0100
++++ b/config/Makefile.msvc	2016-07-08 15:40:47.702426400 +0100
 @@ -97,11 +97,11 @@
  
  ### Build partially-linked object file
- PARTIALLD=lib /nologo /debugtype:cv
+ PARTIALLD=lib /nologo
 -PACKLD=ld -r --oformat pe-i386
 +PACKLD=i686-w64-mingw32-ld -r 
  
