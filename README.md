@@ -16,6 +16,8 @@ The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pu
 
 [`GPR658`](https://github.com/ocaml/ocaml/pull/658) (OCaml 3.07--): ensures that paths are always displayed using backslashes (from `ocamlc -config` and `ocamlbuild -where`).
 
+[`GPR678`](https://github.com/ocaml/ocaml/pull/678) (OCaml 3.08.0--): correctly fixes [`PR3963`](http://caml.inria.fr/mantis/view.php?id=3963) which, for 4.01.0 onwards means that `Graphics.close_graph` doesn't crash the 64-bit runtime and for all versions means that calls to `Graphics.wait_next_event` are unblocked by closing the graphics Window.
+
 [`PR4575`](http://caml.inria.fr/mantis/view.php?id=4575) (OCaml 3.10.x): back-ports a fix to the output of `ocamlbuild -where` as a `\r` character was included in the output.
 
 [`PR4847`](http://caml.inria.fr/mantis/view.pho?id=4847) (OCaml 3.10.0--3.11.1): back-ports commits [f98e29](https://github.com/ocaml/ocaml/commit/f98e29) and [a795c5](https://github.com/ocaml/ocaml/commit/a795c5) to `ocamlc -output-obj` for msvc64.

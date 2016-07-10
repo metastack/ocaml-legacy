@@ -1,0 +1,91 @@
+From 37ce1e2a5a232580794f450111729b3b270bc8ad Mon Sep 17 00:00:00 2001
+From: David Allsopp <david.allsopp@metastack.com>
+Date: Sat, 9 Jul 2016 23:04:43 +0100
+Subject: [PATCH] Graphics.close_graph crashes 64-bit Windows ports
+
+MPR3963 incorrectly fixed in 4.01.0. Closing the graphics window will
+now cause calls to Graphics.wait_next_event to terminate (which was the
+original MPR) and calling Graphics.close_graph no longer crashes the
+64-bit runtime.
+---
+ otherlibs/win32graph/events.c | 18 ++++++++++++++----
+ otherlibs/win32graph/open.c   |  1 -
+ 2 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/otherlibs/win32graph/events.c b/otherlibs/win32graph/events.c
+index 6564283..aaedcfa 100755
+--- a/otherlibs/win32graph/events.c
++++ b/otherlibs/win32graph/events.c
+@@ -22,7 +22,8 @@ enum {
+   EVENT_BUTTON_DOWN = 1,
+   EVENT_BUTTON_UP = 2,
+   EVENT_KEY_PRESSED = 4,
+-  EVENT_MOUSE_MOTION = 8
++  EVENT_MOUSE_MOTION = 8,
++  EVENT_WINDOW_CLOSED = 16
+ };
+ 
+ struct event_data {
+@@ -105,6 +106,10 @@ void caml_gr_handle_event(UINT msg, WPARAM wParam, LPARAM lParam)
+     last_pos = lParam;
+     caml_gr_enqueue_event(EVENT_MOUSE_MOTION, lParam, last_button, 0);
+     break;
++  case WM_DESTROY:
++    // Release any calls to Graphics.wait_next_event
++    ReleaseSemaphore(caml_gr_queue_semaphore, 1, NULL);
++    break;
+   }
+ }
+ 
+@@ -157,15 +162,20 @@ static value caml_gr_wait_event_blocking(int mask)
+     /* Pop oldest event in queue */
+     EnterCriticalSection(&caml_gr_queue_mutex);
+     ev = caml_gr_queue[caml_gr_head];
+-    /* Queue should never be empty at this point, but just in case... */
++    /* Empty queue means the window was closed */
+     if (QueueIsEmpty) {
+-      ev.kind = 0;
++      ev.kind = EVENT_WINDOW_CLOSED;
+     } else {
+       caml_gr_head = (caml_gr_head + 1) % SIZE_QUEUE;
+     }
+     LeaveCriticalSection(&caml_gr_queue_mutex);
+     /* Check if it matches */
+   } while ((ev.kind & mask) == 0);
++
++  if (ev.kind == EVENT_WINDOW_CLOSED) {
++    gr_fail("graphic screen not opened", NULL);
++  }
++
+   return caml_gr_wait_allocate_result(ev.mouse_x, ev.mouse_y, ev.button,
+                                       ev.kind == EVENT_KEY_PRESSED,
+                                       ev.key);
+@@ -176,7 +186,7 @@ CAMLprim value caml_gr_wait_event(value eventlist) /* ML */
+   int mask, poll;
+ 
+   gr_check_open();
+-  mask = 0;
++  mask = EVENT_WINDOW_CLOSED;
+   poll = 0;
+   while (eventlist != Val_int(0)) {
+     switch (Int_val(Field(eventlist, 0))) {
+diff --git a/otherlibs/win32graph/open.c b/otherlibs/win32graph/open.c
+index 016e52e..15c029a 100644
+--- a/otherlibs/win32graph/open.c
++++ b/otherlibs/win32graph/open.c
+@@ -104,7 +104,6 @@ static LRESULT CALLBACK GraphicsWndProc(HWND hwnd,UINT msg,WPARAM wParam,
+                 // End application
+         case WM_DESTROY:
+                 ResetForClose(hwnd);
+-		gr_check_open();
+                 break;
+         }
+         caml_gr_handle_event(msg, wParam, lParam);
+-- 
+2.6.2.windows.1
+
+diff -Naur a/patches/gpr#678.patched b/patches/gpr#678.patched
+--- a/patches/gpr#678.patched	1970-01-01 01:00:00.000000000 +0100
++++ b/patches/gpr#678.patched	2016-07-05 13:54:02.412191200 +0100
+@@ -0,0 +1 @@
++Applied

@@ -58,7 +58,7 @@ if [ $VER -lt 3080 ] ; then
   mv ocaml-3.07 ../$DIR
   cd ..
   rmdir $TDIR
-  PATCHES="ocamldoc-build config-option-3.07 cc-profile debugtype-to-3.08.2 PR3485 PR4614 PR4700 PR5011 ocamldoc-3.07 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3"
+  PATCHES="ocamldoc-build config-option-3.07 cc-profile debugtype-to-3.08.2 PR3485 PR4614 PR4700 PR5011 ocamldoc-3.07 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3 GPR"
 else
   DIR=ocaml-$1
 
@@ -69,40 +69,40 @@ else
   echo Extracting OCaml $1
   tar -xzf $DIR.tar.gz
   if [ $VER -gt 4010 ] ; then # 4.02+
-    PATCHES="gpr#465-3.12.0+ GPR658"
-  elif [ $VER -gt 4001 ] ; then # 4.01+
-    PATCHES="tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658"
+    PATCHES="gpr#465-3.12.0+ GPR658 GPR678"
+  elif [ $VER -gt 4001 ] ; then # 4.01.0
+    PATCHES="tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658 GPR678-4.01.0"
   elif [ $VER -gt 4000 ] ; then # 4.00.1
-    PATCHES="PR5011-3.12+4.00 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658"
+    PATCHES="PR5011-3.12+4.00 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658 GPR678-to-4.00.1"
   elif [ $VER -gt 3121 ] ; then # 4.00.0
-    PATCHES="ocamldoc-build PR5011-3.12+4.00 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658"
+    PATCHES="ocamldoc-build PR5011-3.12+4.00 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658 GPR678-to-4.00.1"
   elif [ $VER -gt 3112 ] ; then # 3.12.x
-    PATCHES="ocamldoc-build PR5011-3.12+4.00 mingw-to-3.12.1 tcl-tk-amd64-3.11-85 gpr#465-3.12.0+ GPR658"
+    PATCHES="ocamldoc-build PR5011-3.12+4.00 mingw-to-3.12.1 tcl-tk-amd64-3.11-85 gpr#465-3.12.0+ GPR658 GPR678-to-4.00.1"
   elif [ $VER -gt 3111 ] ; then # 3.11.2
-    PATCHES="ocamldoc-build PR4700 PR5011-3.11 mingw-to-3.12.1 msvc64-3.11 tcl-tk-amd64-3.11-85 gpr#465-3.09.0+ GPR658-to-3.11.2"
+    PATCHES="ocamldoc-build PR4700 PR5011-3.11 mingw-to-3.12.1 msvc64-3.11 tcl-tk-amd64-3.11-85 gpr#465-3.09.0+ GPR658-to-3.11.2 GPR678-to-4.00.1"
   elif [ $VER -gt 3110 ] ; then # 3.11.1
-    PATCHES="ocamldoc-build PR4700 PR4847 PR5011-3.11 mingw-to-3.12.1 msvc64-3.11 tcl-tk-amd64-3.11-84 gpr#465-3.09.0+ GPR658-to-3.11.2"
+    PATCHES="ocamldoc-build PR4700 PR4847 PR5011-3.11 mingw-to-3.12.1 msvc64-3.11 tcl-tk-amd64-3.11-84 gpr#465-3.09.0+ GPR658-to-3.11.2 GPR678-to-4.00.1"
   elif [ $VER -gt 3102 ] ; then # 3.11.0
-    PATCHES="ocamldoc-build PR4700 PR4847 PR5011-3.11 mingw-to-3.12.1 msvc64-3.11 tcl-tk-amd64-3.11-84 gpr#465-3.09.0+ GPR658-3.11.0"
+    PATCHES="ocamldoc-build PR4700 PR4847 PR5011-3.11 mingw-to-3.12.1 msvc64-3.11 tcl-tk-amd64-3.11-84 gpr#465-3.09.0+ GPR658-3.11.0 GPR678-to-4.00.1"
   elif [ $VER -gt 3101 ] ; then # 3.10.2
     # NB cc-profile must be applied after GPR465
-    PATCHES="ocamldoc-build PR4614 PR4575 PR4700 PR4847-3.10.x PR5011 mingw-to-3.10.2 msvc64-3.10 tcl-tk-amd64-3.10 gpr#465-3.09.0+ cc-profile GPR658-to-3.10.2"
+    PATCHES="ocamldoc-build PR4614 PR4575 PR4700 PR4847-3.10.x PR5011 mingw-to-3.10.2 msvc64-3.10 tcl-tk-amd64-3.10 gpr#465-3.09.0+ cc-profile GPR658-to-3.10.2 GPR678-to-4.00.1"
   elif [ $VER -gt 3100 ] ; then # 3.10.1
     # NB cc-profile must be applied after GPR465
-    PATCHES="ocamldoc-build PR4483 PR4614 PR4575 PR4700 PR4847-3.10.x PR5011 mingw-to-3.10.2 msvc64-3.10 tcl-tk-amd64-3.10 gpr#465-3.09.0+ cc-profile GPR658-to-3.10.2"
+    PATCHES="ocamldoc-build PR4483 PR4614 PR4575 PR4700 PR4847-3.10.x PR5011 mingw-to-3.10.2 msvc64-3.10 tcl-tk-amd64-3.10 gpr#465-3.09.0+ cc-profile GPR658-to-3.10.2 GPR678-to-4.00.1"
   elif [ $VER -gt 3093 ] ; then # 3.10.0
     # NB cc-profile must be applied after GPR465
-    PATCHES="ocamldoc-build PR4614 PR4575 PR4700 PR4847-3.10.x PR5011 mingw-to-3.10.2 msvc64-3.10 tcl-tk-amd64-3.10 gpr#465-3.09.0+ cc-profile GPR658-to-3.10.2"
+    PATCHES="ocamldoc-build PR4614 PR4575 PR4700 PR4847-3.10.x PR5011 mingw-to-3.10.2 msvc64-3.10 tcl-tk-amd64-3.10 gpr#465-3.09.0+ cc-profile GPR658-to-3.10.2 GPR678-to-4.00.1"
   elif [ $VER -gt 3092 ] ; then # 3.09.3
-    PATCHES="ocamldoc-build cc-profile debugtype-3.09.3 PR4614 PR4700 PR5011 mingw-to-3.09.3 gpr#465-3.09.0+ GPR658-to-3.09.3"
+    PATCHES="ocamldoc-build cc-profile debugtype-3.09.3 PR4614 PR4700 PR5011 mingw-to-3.09.3 gpr#465-3.09.0+ GPR658-to-3.09.3 GPR678-to-4.00.1"
   elif [ $VER -gt 3084 ] ; then # 3.09.0-3.09.2
-    PATCHES="ocamldoc-build cc-profile debugtype-to-3.09.2 PR4614 PR4700 PR5011 mingw-to-3.09.3 gpr#465-3.09.0+ GPR658-to-3.09.3"
+    PATCHES="ocamldoc-build cc-profile debugtype-to-3.09.2 PR4614 PR4700 PR5011 mingw-to-3.09.3 gpr#465-3.09.0+ GPR658-to-3.09.3 GPR678-to-4.00.1"
   elif [ $VER -gt 3083 ] ; then # 3.08.4
-    PATCHES="ocamldoc-build config-option-3.08 cc-profile debugtype-to-3.09.2 win32-graph PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3"
+    PATCHES="ocamldoc-build config-option-3.08 cc-profile debugtype-to-3.09.2 win32-graph PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3 GPR678-to-4.00.1"
   elif [ $VER -gt 3082 ] ; then # 3.08.3
-    PATCHES="ocamldoc-build config-option-3.08 cc-profile debugtype-to-3.09.2 PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3"
+    PATCHES="ocamldoc-build config-option-3.08 cc-profile debugtype-to-3.09.2 PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3 GPR678-to-4.00.1"
   else # 3.08.0-3.08.2
-    PATCHES="ocamldoc-build config-option-3.08 cc-profile debugtype-to-3.08.2 PR3485 PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3"
+    PATCHES="ocamldoc-build config-option-3.08 cc-profile debugtype-to-3.08.2 PR3485 PR4614 PR4700 PR5011 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3 GPR678-to-4.00.1"
   fi
 fi
 
