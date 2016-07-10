@@ -68,7 +68,9 @@ else
 
   echo Extracting OCaml $1
   tar -xzf $DIR.tar.gz
-  if [ $VER -gt 4010 ] ; then # 4.02+
+  if [ $VER -gt 4023 ] ; then # 4.03+
+    PATCHES=GPR582
+  elif [ $VER -gt 4010 ] ; then # 4.02.x
     PATCHES="gpr#465-3.12.0+ GPR658 GPR678"
   elif [ $VER -gt 4001 ] ; then # 4.01.0
     PATCHES="tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658 GPR678-4.01.0"

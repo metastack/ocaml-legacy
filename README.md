@@ -14,6 +14,8 @@ The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pu
 
 [`GPR465`](https://github.com/ocaml/ocaml/pull/465) (OCaml 3.07--): adds a `patches` to the output of `ocamlc -config` for noting changes to the compiler. The patches themselves are from the pull request. The patch combines with the `config-option` patch to support 3.07 and 3.08 as well.
 
+[`GPR582`](https://github.com/ocaml/ocaml/pull/582) (OCaml 4.03.0): fixes installation of `.cmx` files for the `systhreads` library.
+
 [`GPR658`](https://github.com/ocaml/ocaml/pull/658) (OCaml 3.07--): ensures that paths are always displayed using backslashes (from `ocamlc -config` and `ocamlbuild -where`).
 
 [`GPR678`](https://github.com/ocaml/ocaml/pull/678) (OCaml 3.08.0--): correctly fixes [`PR3963`](http://caml.inria.fr/mantis/view.php?id=3963) which, for 4.01.0 onwards means that `Graphics.close_graph` doesn't crash the 64-bit runtime and for all versions means that calls to `Graphics.wait_next_event` are unblocked by closing the graphics Window.
