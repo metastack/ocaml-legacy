@@ -24,6 +24,8 @@ The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pu
 
 [`PR4847`](http://caml.inria.fr/mantis/view.pho?id=4847) (OCaml 3.10.0--3.11.1): back-ports commits [f98e29](https://github.com/ocaml/ocaml/commit/f98e29) and [a795c5](https://github.com/ocaml/ocaml/commit/a795c5) to `ocamlc -output-obj` for msvc64.
 
+[`PR6766`](http://caml.inria.fr/mantis/view.pho?id=6766) (OCaml 3.12.0--4.02.3): back-ports commit [b014f2](https://github.com/ocaml/ocaml/commit/b014f2) fixing an intermittent crash when using systhreads.
+
 ## Patches
 
 The following patches address build system or environment changes which have occurred since these versions of OCaml were originally released:

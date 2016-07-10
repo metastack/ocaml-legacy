@@ -1,0 +1,94 @@
+From b014f28923daee1b76cfa6c055ebb73d2a2b3462 Mon Sep 17 00:00:00 2001
+From: Damien Doligez <damien.doligez-inria.fr>
+Date: Tue, 31 Mar 2015 20:46:10 +0000
+Subject: [PATCH] PR#6776: Failure to kill the "tick" thread, segfault when
+ exiting the runtime
+
+git-svn-id: http://caml.inria.fr/svn/ocaml/trunk@15975 f963ae5c-01c2-4b8c-9fe0-0dff7051ff02
+---
+ otherlibs/systhreads/st_stubs.c | 11 ++++++++---
+ otherlibs/systhreads/st_win32.h | 14 ++++++++------
+ 2 files changed, 27 insertions(+), 24 deletions(-)
+
+diff --git a/otherlibs/systhreads/st_stubs.c b/otherlibs/systhreads/st_stubs.c
+index eab89ab..02ff512 100644
+--- a/otherlibs/systhreads/st_stubs.c
++++ b/otherlibs/systhreads/st_stubs.c
+@@ -95,10 +95,10 @@ static caml_thread_t curr_thread = NULL;
+ /* The master lock protecting the OCaml runtime system */
+ static st_masterlock caml_master_lock;
+ 
+-/* Whether the ``tick'' thread is already running */
++/* Whether the "tick" thread is already running */
+ static int caml_tick_thread_running = 0;
+ 
+-/* The thread identifier of the ``tick'' thread */
++/* The thread identifier of the "tick" thread */
+ static st_thread_id caml_tick_thread_id;
+ 
+ /* The key used for storing the thread descriptor in the specific data
+@@ -444,7 +444,12 @@ CAMLprim value caml_thread_initialize(value unit)   /* ML */
+ 
+ CAMLprim value caml_thread_cleanup(value unit)   /* ML */
+ {
+-  if (caml_tick_thread_running) st_thread_kill(caml_tick_thread_id);
++  if (caml_tick_thread_running){
++    caml_tick_thread_stop = 1;
++    st_thread_join(caml_tick_thread_id);
++    caml_tick_thread_stop = 0;
++    caml_tick_thread_running = 0;
++  }
+   return Val_unit;
+ }
+ 
+diff --git a/otherlibs/systhreads/st_win32.h b/otherlibs/systhreads/st_win32.h
+index cd04b31..9cc7bb8 100644
+--- a/otherlibs/systhreads/st_win32.h
++++ b/otherlibs/systhreads/st_win32.h
+@@ -84,11 +84,10 @@ static void st_thread_exit(void)
+   ExitThread(0);
+ }
+ 
+-static void st_thread_kill(st_thread_id thr)
++static void st_thread_join(st_thread_id thr)
+ {
+-  TRACE1("st_thread_kill", thr);
+-  TerminateThread(thr, 0);
+-  CloseHandle(thr);
++  TRACE1("st_thread_join", h);
++  WaitForSingleObject(thr, INFINITE);
+ }
+ 
+ /* Scheduling hints */
+@@ -383,18 +382,21 @@ static void st_check_error(DWORD retcode, char * msg)
+   raise_sys_error(str);
+ }
+ 
++/* Variable used to stop the "tick" thread */
++static volatile int caml_tick_thread_stop = 0;
++
+ /* The tick thread: posts a SIGPREEMPTION signal periodically */
+ 
+ static DWORD WINAPI caml_thread_tick(void * arg)
+ {
+-  while(1) {
++  while(! caml_tick_thread_stop) {
+     Sleep(Thread_timeout);
+     /* The preemption signal should never cause a callback, so don't
+      go through caml_handle_signal(), just record signal delivery via
+      caml_record_signal(). */
+     caml_record_signal(SIGPREEMPTION);
+   }
+-  return 0;                     /* prevents compiler warning */
++  return 0;
+ }
+ 
+ /* "At fork" processing -- none under Win32 */
+-- 
+2.6.1.windows.1
+
+diff -Naur a/patches/mpr#6766.patched b/patches/mpr#6766.patched
+--- a/patches/mpr#6766.patched	1970-01-01 01:00:00.000000000 +0100
++++ b/patches/mpr#6766.patched	2016-07-05 13:54:02.412191200 +0100
+@@ -0,0 +1 @@
++Applied
