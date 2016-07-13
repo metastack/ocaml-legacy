@@ -58,7 +58,7 @@ if [ $VER -lt 3080 ] ; then
   mv ocaml-3.07 ../$DIR
   cd ..
   rmdir $TDIR
-  PATCHES="ocamldoc-build config-option-3.07 cc-profile debugtype-to-3.08.2 PR3485 PR4614 PR4700 PR5011 ocamldoc-3.07 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3 GPR"
+  PATCHES="ocamldoc-build config-option-3.07 cc-profile debugtype-to-3.08.2 PR3485 PR4614 PR4700 PR5011 ocamldoc-3.07 mingw-to-3.08.4 msvc-to-3.08.4 gpr#465-3.09.0+ GPR658-to-3.09.3"
 else
   DIR=ocaml-$1
 
