@@ -21,6 +21,24 @@ diff -Naur a/Makefile.nt b/Makefile.nt
              -e "s|%%BYTERUN%%|ocamlrun|" \
              -e 's|%%CCOMPTYPE%%|$(CCOMPTYPE)|' \
              -e "s|%%BYTECC%%|$(BYTECC) $(BYTECCCOMPOPTS)|" \
+diff -Naur a/camlp4/odyl/Makefile b/camlp4/odyl/Makefile
+--- a/camlp4/odyl/Makefile	2003-08-29 13:15:15.000000000 +0100
++++ b/camlp4/odyl/Makefile	2016-07-13 20:36:02.106693500 +0100
+@@ -31,10 +31,10 @@
+ odyl_config.ml:
+ 	(echo 'let standard_library ='; \
+ 	 echo '  try Sys.getenv "CAMLP4LIB" with Not_found -> '; \
+-	 echo '  try Sys.getenv "OCAMLLIB" ^ "/camlp4" with Not_found -> '; \
+-	 echo '  try Sys.getenv "CAMLLIB" ^ "/camlp4" with Not_found -> '; \
+-         echo '  "$(LIBDIR)/camlp4"') \
+-        | sed -e 's|\\|/|g' > odyl_config.ml
++	 echo '  try Filename.concat (Sys.getenv "OCAMLLIB") "camlp4" with Not_found -> '; \
++	 echo '  try Filename.concat (Sys.getenv "CAMLLIB") "camlp4" with Not_found -> '; \
++         echo '  Filename.concat "$(subst /,\,$(LIBDIR))" "camlp4"') \
++        | sed -e 's|\\|\\\\|g' > odyl_config.ml
+ 
+ clean::
+ 	rm -f *.cm* *.pp[io] *.$(O) *.bak .*.bak *.out *.opt *.$(A)
 diff -Naur a/patches/gpr#658.patched b/patches/gpr#658.patched
 --- a/patches/gpr#658.patched	1970-01-01 01:00:00.000000000 +0100
 +++ b/patches/gpr#658.patched	2016-07-05 13:54:02.412191200 +0100
