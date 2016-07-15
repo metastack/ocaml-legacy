@@ -70,16 +70,18 @@ else
   tar -xzf $DIR.tar.gz
   if [ $VER -gt 4023 ] ; then # 4.03+
     PATCHES="GPR582 GPR658"
-  elif [ $VER -gt 4010 ] ; then # 4.02.x
-    PATCHES="PR6766 gpr#465-3.12.0+ GPR658 GPR678"
+  elif [ $VER -gt 4021 ] ; then # 4.02.2-4.02.3
+    PATCHES="PR6766 gpr#465-3.12.0+ GPR658-to-4.02.3 GPR678"
+  elif [ $VER -gt 4010 ] ; then # 4.02.0-4.02.1
+    PATCHES="PR6766 gpr#465-3.12.0+ GPR658-to-4.02.1 GPR678"
   elif [ $VER -gt 4001 ] ; then # 4.01.0
-    PATCHES="PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658 GPR678-4.01.0"
+    PATCHES="PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-4.01.0"
   elif [ $VER -gt 4000 ] ; then # 4.00.1
-    PATCHES="PR5011-3.12+4.00 PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658 GPR678-to-4.00.1"
+    PATCHES="PR5011-3.12+4.00 PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-to-4.00.1"
   elif [ $VER -gt 3121 ] ; then # 4.00.0
-    PATCHES="ocamldoc-build PR5011-3.12+4.00 PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658 GPR678-to-4.00.1"
+    PATCHES="ocamldoc-build PR5011-3.12+4.00 PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-to-4.00.1"
   elif [ $VER -gt 3112 ] ; then # 3.12.x
-    PATCHES="ocamldoc-build PR5011-3.12+4.00 PR6766 mingw-to-3.12.1 tcl-tk-amd64-3.11-85 gpr#465-3.12.0+ GPR658 GPR678-to-4.00.1"
+    PATCHES="ocamldoc-build PR5011-3.12+4.00 PR6766 mingw-to-3.12.1 tcl-tk-amd64-3.11-85 gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-to-4.00.1"
   elif [ $VER -gt 3111 ] ; then # 3.11.2
     PATCHES="ocamldoc-build PR4700 PR5011-3.11 mingw-to-3.12.1 msvc64-3.11 tcl-tk-amd64-3.11-85 gpr#465-3.09.0+ GPR658-to-3.11.2 GPR678-to-4.00.1"
   elif [ $VER -gt 3110 ] ; then # 3.11.1

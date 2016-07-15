@@ -33,6 +33,17 @@ diff -Naur a/ocamlbuild/ocaml_specific.ml b/ocamlbuild/ocaml_specific.ml
  let install_bin = lazy (My_std.getenv ~default:"/usr/local/bin" "INSTALL_BIN") in
  file_rule "ocamlbuild_where.ml"
    ~prod:"%ocamlbuild_where.ml"
+diff -Naur a/build/mkmyocamlbuild_config.sh b/build/mkmyocamlbuild_config.sh
+--- a/build/mkmyocamlbuild_config.sh	2007-05-28 10:26:51.000000000 +0100
++++ b/build/mkmyocamlbuild_config.sh	2016-07-14 19:52:32.841206700 +0100
+@@ -4,6 +4,7 @@
+ cd `dirname $0`/..
+ 
+ sed \
++    -e '/^\(PREFIX\|DISTRIB\|TK_ROOT\|TK_DEFS\|TK_LINK\|[^ ]*DIR\)=/s|/|\\\\|g' \
+     -e 's/^#ml \(.*\)/\1/' \
+     -e 's/^\(#.*\)$/(* \1 *)/' \
+     -e 's/^\(.*\$([0-9]).*\)$/(* \1 *)/' \
 diff -Naur a/patches/gpr#658.patched b/patches/gpr#658.patched
 --- a/patches/gpr#658.patched	1970-01-01 01:00:00.000000000 +0100
 +++ b/patches/gpr#658.patched	2016-07-05 13:54:02.412191200 +0100
