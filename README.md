@@ -24,6 +24,8 @@ The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pu
 
 [`PR4847`](http://caml.inria.fr/mantis/view.pho?id=4847) (OCaml 3.10.0--3.11.1): back-ports commits [f98e29](https://github.com/ocaml/ocaml/commit/f98e29) and [a795c5](https://github.com/ocaml/ocaml/commit/a795c5) to `ocamlc -output-obj` for msvc64.
 
+[`PR5331`](http://caml.inria.fr/mantis/view.pho?id=5331) (OCaml 3.12.1): back-ports commit [6b6e39](https://github.com/ocaml/ocaml/commit/6b6e39) fixing the installation of ocamlmktop without the .exe extension on Windows.
+
 [`PR6766`](http://caml.inria.fr/mantis/view.pho?id=6766) (OCaml 3.12.0--4.02.3): back-ports commit [b014f2](https://github.com/ocaml/ocaml/commit/b014f2) fixing an intermittent crash when using systhreads.
 
 [`PR6797`](http://caml.inria.fr/mantis/view.pho?id=6766) (OCaml 4.02.2--4.02.3): back-ports commit [44b8b5](https://github.com/ocaml/ocaml/commit/44b8b5) fixing the -output-complete-obj option for the Microsoft C compiler ports.

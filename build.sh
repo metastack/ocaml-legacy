@@ -80,7 +80,9 @@ else
     PATCHES="PR5011-3.12+4.00 PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-to-4.00.1"
   elif [ $VER -gt 3121 ] ; then # 4.00.0
     PATCHES="ocamldoc-build PR5011-3.12+4.00 PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-to-4.00.1"
-  elif [ $VER -gt 3112 ] ; then # 3.12.x
+  elif [ $VER -gt 3120 ] ; then # 3.12.1
+    PATCHES="ocamldoc-build PR5011-3.12+4.00 PR5331 PR6766 mingw-to-3.12.1 tcl-tk-amd64-3.11-85 gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-to-4.00.1"
+  elif [ $VER -gt 3112 ] ; then # 3.12.0
     PATCHES="ocamldoc-build PR5011-3.12+4.00 PR6766 mingw-to-3.12.1 tcl-tk-amd64-3.11-85 gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-to-4.00.1"
   elif [ $VER -gt 3111 ] ; then # 3.11.2
     PATCHES="ocamldoc-build PR4700 PR5011-3.11 mingw-to-3.12.1 msvc64-3.11 tcl-tk-amd64-3.11-85 gpr#465-3.09.0+ GPR658-to-3.11.2 GPR678-to-4.00.1"
