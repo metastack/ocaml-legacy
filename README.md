@@ -22,6 +22,8 @@ The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pu
 
 [`PR4575`](http://caml.inria.fr/mantis/view.php?id=4575) (OCaml 3.10.x): back-ports a fix to the output of `ocamlbuild -where` as a `\r` character was included in the output.
 
+[`PR4683`](http://caml.inria.fr/mantis/view.php?id=4683) (OCaml 3.11.x): back-ports commit [27e0b7](https://github.com/ocaml/ocaml/commit/27e0b7) from 3.12.0 installing labltk.bat instead of a bash script.
+
 [`PR4847`](http://caml.inria.fr/mantis/view.pho?id=4847) (OCaml 3.10.0--3.11.1): back-ports commits [f98e29](https://github.com/ocaml/ocaml/commit/f98e29) and [a795c5](https://github.com/ocaml/ocaml/commit/a795c5) to `ocamlc -output-obj` for msvc64.
 
 [`PR5331`](http://caml.inria.fr/mantis/view.pho?id=5331) (OCaml 3.12.1): back-ports commit [6b6e39](https://github.com/ocaml/ocaml/commit/6b6e39) fixing the installation of ocamlmktop without the .exe extension on Windows.

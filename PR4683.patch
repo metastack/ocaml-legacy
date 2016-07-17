@@ -1,0 +1,59 @@
+From 27e0b7009e34e22b4f375b7a121fdc6f91aeba28 Mon Sep 17 00:00:00 2001
+From: Jacques Garrigue <garrigue at math.nagoya-u.ac.jp>
+Date: Tue, 8 Jun 2010 00:54:09 +0000
+Subject: [PATCH] PR#4683: use a batch file without fixed paths for labltk on
+ MSVC/mingw
+
+git-svn-id: http://caml.inria.fr/svn/ocaml/version/3.12@10537 f963ae5c-01c2-4b8c-9fe0-0dff7051ff02
+---
+ otherlibs/labltk/lib/Makefile   | 13 +++++++++++--
+ otherlibs/labltk/lib/labltk.bat |  1 +
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+ create mode 100755 otherlibs/labltk/lib/labltk.bat
+
+diff --git a/otherlibs/labltk/lib/Makefile b/otherlibs/labltk/lib/Makefile
+index 91f477f..b82bcdd 100644
+--- a/otherlibs/labltk/lib/Makefile
++++ b/otherlibs/labltk/lib/Makefile
+@@ -57,14 +57,23 @@ $(LIBNAME): Makefile $(TOPDIR)/config/Makefile
+ 	@echo "#!/bin/sh" > $@
+ 	@echo 'exec $(INSTALLDIR)/$(LIBNAME)top$(EXE) -I $(INSTALLDIR) $$*' >> $@
+ 
++install-script: $(LIBNAME)
++	cp $(LIBNAME) $(BINDIR)
++	chmod 755 $(BINDIR)/$(LIBNAME)
++
++install-batch:
++	cp labltk.bat $(BINDIR)
++
+ install:
+ 	if test -d $(INSTALLDIR); then : ; else mkdir $(INSTALLDIR); fi
+ 	cp $(LIBNAME).cma $(LIBNAME)top$(EXE) $(INSTALLDIR)
+ 	chmod 644 $(INSTALLDIR)/$(LIBNAME).cma
+ 	chmod 755 $(INSTALLDIR)/$(LIBNAME)top$(EXE)
+ 	@if test -d $(BINDIR); then : ; else mkdir $(BINDIR); fi
+-	cp $(LIBNAME) $(BINDIR)
+-	chmod 755 $(BINDIR)/$(LIBNAME)
++	@case x$(TOOLCHAIN) in \
++	  xmingw|xmsvc) $(MAKE) install-batch ;; \
++	  *) 		$(MAKE) install-script ;; \
++	esac
+ 
+ installopt:
+ 	@if test -d $(INSTALLDIR); then : ; else mkdir $(INSTALLDIR); fi
+diff --git a/otherlibs/labltk/lib/labltk.bat b/otherlibs/labltk/lib/labltk.bat
+new file mode 100755
+index 0000000..f760e80
+--- /dev/null
++++ b/otherlibs/labltk/lib/labltk.bat
+@@ -0,0 +1 @@
++@ocaml -I +labltk labltk.cma %1 %2 %3 %4 %5 %6 %7 %8 %9
+\ No newline at end of file
+-- 
+2.8.3.windows.1
+
+diff -Naur a/patches/mpr#4683.patched b/patches/mpr#4683.patched
+--- a/patches/mpr#4683.patched	1970-01-01 01:00:00.000000000 +0100
++++ b/patches/mpr#4683.patched	2016-07-05 13:54:02.412191200 +0100
+@@ -0,0 +1 @@
++Applied
