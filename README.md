@@ -26,6 +26,8 @@ The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pu
 
 [`PR6766`](http://caml.inria.fr/mantis/view.pho?id=6766) (OCaml 3.12.0--4.02.3): back-ports commit [b014f2](https://github.com/ocaml/ocaml/commit/b014f2) fixing an intermittent crash when using systhreads.
 
+[`PR6797`](http://caml.inria.fr/mantis/view.pho?id=6766) (OCaml 4.02.2--4.02.3): back-ports commit [44b8b5](https://github.com/ocaml/ocaml/commit/44b8b5) fixing the -output-complete-obj option for the Microsoft C compiler ports.
+
 ## Patches
 
 The following patches address build system or environment changes which have occurred since these versions of OCaml were originally released:
