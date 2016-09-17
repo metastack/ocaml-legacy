@@ -14,7 +14,7 @@ The following relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pu
 
 [`GPR465`](https://github.com/ocaml/ocaml/pull/465) (OCaml 3.07--): adds a `patches` to the output of `ocamlc -config` for noting changes to the compiler. The patches themselves are from the pull request. The patch combines with the `config-option` patch to support 3.07 and 3.08 as well.
 
-[`GPR582`](https://github.com/ocaml/ocaml/pull/582) (OCaml 4.03.0): fixes installation of `.cmx` files for the `systhreads` library.
+[`GPR582`](https://github.com/ocaml/ocaml/pull/582) (OCaml 4.03.0): back-ports [cfb03b](https://github.com/ocaml/ocaml/commit/cfb03b)  fixing installation of `.cmx` files for the `systhreads` library.
 
 [`GPR658`](https://github.com/ocaml/ocaml/pull/658) (OCaml 3.07--): ensures that paths are always displayed using backslashes (from `ocamlc -config`, `camlp4 -where` and `ocamlbuild -where`).
 
@@ -70,6 +70,6 @@ The following patches relate to [Mantis](http://caml.inria.fr/mantis) PRs:
 
 `all.sh` and `build.sh` are copyright MetaStack Solutions Ltd., 2016 and distributed under the terms of the licence given at the top of each file.
 
-Patches relating to PR3485, PR4614 and PR5011 (`PR3485.patch`, `PR4614.patch`, `PR5011.patch`, `PR5011-3.11.patch` and `PR5011-3.12+4.00.patch`) are back-ports of work already in the OCaml repository. The changes made in these patches are the copyrights of their respective authors and are distributed under the terms of the GNU Lesser Public Licence version 2.1 (see the file `LICENSE` in the [OCaml repository](https://github.com/ocaml/ocaml/blob/trunk/LICENSE)).
+Patches above described as back-ports represent work already in the OCaml repository. The changes made in these patches are the copyrights of their respective authors and are distributed under the terms of the GNU Lesser Public Licence version 2.1 (see the file `LICENSE` in the [OCaml repository](https://github.com/ocaml/ocaml/blob/trunk/LICENSE)).
 
 All other patches are the work of David Allsopp and are released under the [Creative Commons CC0 1.0 Universal licence](https://creativecommons.org/publicdomain/zero/1.0/).
