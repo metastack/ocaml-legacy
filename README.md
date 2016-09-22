@@ -54,6 +54,8 @@ The following patches address build system or environment changes which have occ
 
 `tcl-tk-amd64` (OCaml 3.10.x--4.01.0): at the time of the release of 64-bit OCaml for Windows (using the Microsoft C Compiler for 3.10.0 and also GCC for 4.00.0) there was not a readily available 64-bit distribution of Tcl/Tk for Windows, so labltk was disabled for these ports. However, it has always worked and these patches enable the build system to build the 64-bit labltk for all versions.
 
+`win-runtime` (OCaml 3.11.0--4.02.1): back-ports commit [615472](https://github.com/ocaml/ocaml/commit/615472) which fixes the output filename when compiling the debug runtime.
+
 The following patches relate to [Mantis](http://caml.inria.fr/mantis) PRs:
 
 [`PR3485`](http://caml.inria.fr/mantis/view.php?id=3485) (OCaml 3.07--3.08.2): back-ports a Cygwin-related change made in OCaml 3.08.3.
