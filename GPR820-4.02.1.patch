@@ -1,0 +1,95 @@
+diff -Naur a/byterun/Makefile.nt b/byterun/Makefile.nt
+--- a/byterun/Makefile.nt	2013-03-09 22:38:52.000000000 +0000
++++ b/byterun/Makefile.nt	2016-09-22 15:11:31.885183700 +0100
+@@ -14,6 +14,7 @@
+ include Makefile.common
+ 
+ CFLAGS=-DOCAML_STDLIB_DIR='"$(LIBDIR)"' $(IFLEXDIR)
++DFLAGS=$(CFLAGS) -DDEBUG
+ 
+ DBGO=d.$(O)
+ OBJS=$(COMMONOBJS:.o=.$(O)) win32.$(O) main.$(O)
+@@ -24,7 +25,7 @@
+ 	         $(EXTRALIBS) libcamlrun.$(A)
+ 
+ ocamlrund$(EXE): libcamlrund.$(A) prims.$(O) main.$(O)
+-	$(MKEXE) -o ocamlrun$(EXE) $(BYTECCDBGCOMPOPTS) prims.$(O) \
++	$(MKEXE) -o ocamlrun$(EXE) prims.$(O) \
+ 	         $(call SYSLIB,ws2_32) $(EXTRALIBS) libcamlrund.$(A)
+ 
+ libcamlrun.$(A): $(OBJS)
+@@ -49,7 +50,10 @@
+ 	echo " mlvalues.h memory.h gc.h major_gc.h \\" >> .depend.win32
+ 	echo " freelist.h minor_gc.h osdeps.h signals.h" >> .depend.win32
+ 	cat .depend >> .depend.win32
+-	sed -e '/\.d\.o/q' -e 's/^\(.*\)\.o:/\1.$$(O) \1.$$(DBGO):/' \
++	sed -ne '/\.pic\.o/q' \
++	    -e 's/^\(.*\)\.d\.o:/\1.$$(DBGO):/' \
++	    -e 's/^\(.*\)\.o:/\1.$$(O):/' \
++	    -e p \
+ 	    .depend.win32 > .depend.nt
+ 	rm -f .depend.win32
+ 
+diff -Naur a/config/Makefile.mingw b/config/Makefile.mingw
+--- a/config/Makefile.mingw	2014-10-03 20:17:58.000000000 +0100
++++ b/config/Makefile.mingw	2016-09-22 15:07:37.780691500 +0100
+@@ -95,6 +95,12 @@
+ ### Additional compile-time options for $(BYTECC).  (For static linking.)
+ BYTECCCOMPOPTS=-O -mms-bitfields -Wall -Wno-unused
+ 
++### Additional compile-time options for $(BYTECC).  (For debug version.)
++BYTECCDBGCOMPOPTS=-g
++
++### Flag to use to rename object files.  (for debug version.)
++NAME_OBJ_FLAG=-o
++
+ ### Additional link-time options for $(BYTECC).  (For static linking.)
+ BYTECCLINKOPTS=
+ 
+diff -Naur a/config/Makefile.mingw64 b/config/Makefile.mingw64
+--- a/config/Makefile.mingw64	2014-10-03 20:17:58.000000000 +0100
++++ b/config/Makefile.mingw64	2016-09-22 15:07:37.780691500 +0100
+@@ -95,6 +95,12 @@
+ ### Additional compile-time options for $(BYTECC).  (For static linking.)
+ BYTECCCOMPOPTS=-O -mms-bitfields -Wall -Wno-unused
+ 
++### Additional compile-time options for $(BYTECC).  (For debug version.)
++BYTECCDBGCOMPOPTS=-g
++
++### Flag to use to rename object files.  (for debug version.)
++NAME_OBJ_FLAG=-o
++
+ ### Additional link-time options for $(BYTECC).  (For static linking.)
+ BYTECCLINKOPTS=
+ 
+diff -Naur a/config/Makefile.msvc b/config/Makefile.msvc
+--- a/config/Makefile.msvc	2014-10-06 14:36:23.000000000 +0100
++++ b/config/Makefile.msvc	2016-09-22 15:07:37.780691500 +0100
+@@ -86,6 +86,12 @@
+ ### Additional compile-time options for $(BYTECC).  (For static linking.)
+ BYTECCCOMPOPTS=-Ox -MD
+ 
++### Additional compile-time options for $(BYTECC).  (For debug version.)
++BYTECCDBGCOMPOPTS=-Zi
++
++### Flag to use to rename object files.  (for debug version.)
++NAME_OBJ_FLAG=/Fo
++
+ ### Additional link-time options for $(BYTECC).  (For static linking.)
+ BYTECCLINKOPTS=
+ 
+diff -Naur a/config/Makefile.msvc64 b/config/Makefile.msvc64
+--- a/config/Makefile.msvc64	2014-10-06 14:36:23.000000000 +0100
++++ b/config/Makefile.msvc64	2016-09-22 15:07:37.780691500 +0100
+@@ -86,7 +86,10 @@
+ BYTECCCOMPOPTS=-Ox -MD
+ 
+ ### Additional compile-time options for $(BYTECC).  (For debug version.)
+-BYTECCDBGCOMPOPTS=-DDEBUG -Zi -W3 -Wp64
++BYTECCDBGCOMPOPTS=-Zi
++
++### Flag to use to rename object files.  (for debug version.)
++NAME_OBJ_FLAG=/Fo
+ 
+ ### Additional link-time options for $(BYTECC).  (For static linking.)
+ BYTECCLINKOPTS=

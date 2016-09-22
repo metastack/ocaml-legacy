@@ -1,0 +1,129 @@
+From c1d3a76174a9fe4bc1787c78110924edbb81e645 Mon Sep 17 00:00:00 2001
+From: David Allsopp <david.allsopp@metastack.com>
+Date: Thu, 22 Sep 2016 14:31:32 +0100
+Subject: [PATCH] Fix Windows compilation of ocamlrund/libcamlrund
+
+Fixes various problems with compiling ocamlrund on Windows - most
+notably the fact that only msvc64 actually activated debug mode!
+---
+ byterun/Makefile.nt     | 11 ++++++++---
+ config/Makefile.mingw   |  6 ++++++
+ config/Makefile.mingw64 |  6 ++++++
+ config/Makefile.msvc    |  6 ++++++
+ config/Makefile.msvc64  |  5 ++++-
+ 5 files changed, 30 insertions(+), 4 deletions(-)
+
+diff --git a/byterun/Makefile.nt b/byterun/Makefile.nt
+index 06b39c6..e74bdd9 100644
+--- a/byterun/Makefile.nt
++++ b/byterun/Makefile.nt
+@@ -16,6 +16,7 @@
+ include Makefile.common
+ 
+ CFLAGS=-DOCAML_STDLIB_DIR='"$(LIBDIR)"' $(IFLEXDIR)
++DFLAGS=$(CFLAGS) -DDEBUG
+ 
+ ifdef BOOTSTRAPPING_FLEXLINK
+ MAKE_OCAMLRUN=$(MKEXE_BOOT)
+@@ -33,7 +34,7 @@ ocamlrun$(EXE): libcamlrun.$(A) prims.$(O)
+ 	         $(call SYSLIB,ws2_32) $(EXTRALIBS))
+ 
+ ocamlrund$(EXE): libcamlrund.$(A) prims.$(O) main.$(O)
+-	$(MKEXE) -o ocamlrund$(EXE) $(BYTECCDBGCOMPOPTS) prims.$(O) \
++	$(MKEXE) -o ocamlrund$(EXE) prims.$(O) \
+ 	         $(call SYSLIB,ws2_32) $(EXTRALIBS) libcamlrund.$(A)
+ 
+ libcamlrun.$(A): $(OBJS)
+@@ -45,8 +46,9 @@ libcamlrund.$(A): $(DOBJS)
+ %.$(O): %.c
+ 	$(CC) $(CFLAGS) $(BYTECCCOMPOPTS) -c $<
+ 
++# It is imperative that there is no space after $(NAME_OBJ_FLAG)
+ %.$(DBGO): %.c
+-	$(CC) $(CFLAGS) $(BYTECCDBGCOMPOPTS) -c -o $@ $<
++	$(CC) $(DFLAGS) $(BYTECCDBGCOMPOPTS) -c $(NAME_OBJ_FLAG)$@ $<
+ 
+ .depend.nt: .depend
+ 	rm -f .depend.win32
+@@ -59,7 +61,10 @@ libcamlrund.$(A): $(DOBJS)
+ 	echo " caml/freelist.h caml/minor_gc.h caml/osdeps.h caml/signals.h"\
+ 	  >> .depend.win32
+ 	cat .depend >> .depend.win32
+-	sed -e '/\.d\.o/q' -e 's/^\(.*\)\.o:/\1.$$(O) \1.$$(DBGO):/' \
++	sed -ne '/\.pic\.o/q' \
++	    -e 's/^\(.*\)\.d\.o:/\1.$$(DBGO):/' \
++	    -e 's/^\(.*\)\.o:/\1.$$(O):/' \
++	    -e p \
+ 	    .depend.win32 > .depend.nt
+ 	rm -f .depend.win32
+ 
+diff --git a/config/Makefile.mingw b/config/Makefile.mingw
+index d261afb..f2d0411 100644
+--- a/config/Makefile.mingw
++++ b/config/Makefile.mingw
+@@ -100,6 +100,12 @@ BYTECC=$(TOOLPREF)gcc
+ ### Additional compile-time options for $(BYTECC).  (For static linking.)
+ BYTECCCOMPOPTS=-O -mms-bitfields -Wall -Wno-unused
+ 
++### Additional compile-time options for $(BYTECC).  (For debug version.)
++BYTECCDBGCOMPOPTS=-g
++
++### Flag to use to rename object files.  (for debug version.)
++NAME_OBJ_FLAG=-o
++
+ ### Additional link-time options for $(BYTECC).  (For static linking.)
+ BYTECCLINKOPTS=
+ 
+diff --git a/config/Makefile.mingw64 b/config/Makefile.mingw64
+index f6fddb9..14c575b 100644
+--- a/config/Makefile.mingw64
++++ b/config/Makefile.mingw64
+@@ -100,6 +100,12 @@ BYTECC=$(TOOLPREF)gcc
+ ### Additional compile-time options for $(BYTECC).  (For static linking.)
+ BYTECCCOMPOPTS=-O -mms-bitfields -Wall -Wno-unused
+ 
++### Additional compile-time options for $(BYTECC).  (For debug version.)
++BYTECCDBGCOMPOPTS=-g
++
++### Flag to use to rename object files.  (for debug version.)
++NAME_OBJ_FLAG=-o
++
+ ### Additional link-time options for $(BYTECC).  (For static linking.)
+ BYTECCLINKOPTS=
+ 
+diff --git a/config/Makefile.msvc b/config/Makefile.msvc
+index 0a657bf..d2e497b 100644
+--- a/config/Makefile.msvc
++++ b/config/Makefile.msvc
+@@ -94,6 +94,12 @@ BYTECC=cl -nologo -D_CRT_SECURE_NO_DEPRECATE
+ ### Additional compile-time options for $(BYTECC).  (For static linking.)
+ BYTECCCOMPOPTS=-O2 -Gy- -MD
+ 
++### Additional compile-time options for $(BYTECC).  (For debug version.)
++BYTECCDBGCOMPOPTS=-Zi
++
++### Flag to use to rename object files.  (for debug version.)
++NAME_OBJ_FLAG=/Fo
++
+ ### Additional link-time options for $(BYTECC).  (For static linking.)
+ BYTECCLINKOPTS=
+ 
+diff --git a/config/Makefile.msvc64 b/config/Makefile.msvc64
+index dbc21d5..9856cb1 100644
+--- a/config/Makefile.msvc64
++++ b/config/Makefile.msvc64
+@@ -94,7 +94,10 @@ BYTECC=cl -nologo -D_CRT_SECURE_NO_DEPRECATE
+ BYTECCCOMPOPTS=-O2 -Gy- -MD
+ 
+ ### Additional compile-time options for $(BYTECC).  (For debug version.)
+-BYTECCDBGCOMPOPTS=-DDEBUG -Zi -W3 -Wp64
++BYTECCDBGCOMPOPTS=-Zi
++
++### Flag to use to rename object files.  (for debug version.)
++NAME_OBJ_FLAG=/Fo
+ 
+ ### Additional link-time options for $(BYTECC).  (For static linking.)
+ BYTECCLINKOPTS=
+-- 
+2.6.2.windows.1
+

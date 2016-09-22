@@ -56,7 +56,9 @@ The following patches address build system or environment changes which have occ
 
 `win-runtime` (OCaml 3.11.0--4.02.1): back-ports commit [615472](https://github.com/ocaml/ocaml/commit/615472) which fixes the output filename when compiling the debug runtime.
 
-The following patches relate to [Mantis](http://caml.inria.fr/mantis) PRs:
+The following patches relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pulls) and [Mantis](http://caml.inria.fr/mantis) PRs:
+
+[`GPR820`](https://github.com/ocaml/ocaml/pull/820) (OCaml 4.01.0--): fixes various issues with compilation of the debugging version of the bytecode runtime. Versions before 4.01.0 not yet reviewed.
 
 [`PR3485`](http://caml.inria.fr/mantis/view.php?id=3485) (OCaml 3.07--3.08.2): back-ports a Cygwin-related change made in OCaml 3.08.3.
 
