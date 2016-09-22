@@ -48,7 +48,7 @@ The following patches address build system or environment changes which have occ
 
 `ocamldoc-3.07` (OCaml 3.07): missing spaces in `ocamldoc/Makefile.nt` (it's actually not clear how this ever functioned, even in an old version of make!).
 
-`ocamldoc-build` (OCaml 3.07--4.00.0): fixes a build system problem caused by a French accent in `ocamldoc/odoc_messages.ml` (the message was translated into English for OCaml 4.01.0 which eliminated the issue).
+`ocamldoc-build` (OCaml 3.07--4.00.1): fixes a build system problem caused by various French accents in `ocamldoc` (a concerted effort was made to eliminate encoding problems prior to OCaml 4.01.0).
 
 `output-obj` (OCaml 3.07): back-ports a small part of [e2b313](https://github.com/ocaml/ocaml/commit/e2b313) which suppresses a warning emitted by GCC for `ocamlc -output-obj`
 
