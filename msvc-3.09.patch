@@ -1,0 +1,12 @@
+diff -Naur a/config/Makefile.msvc b/config/Makefile.msvc
+--- a/config/Makefile.msvc	2005-08-01 16:51:09.000000000 +0100
++++ b/config/Makefile.msvc	2016-09-22 20:54:20.663288900 +0100
+@@ -97,7 +97,7 @@
+ 
+ ### Build partially-linked object file
+ PARTIALLD=lib /nologo
+-PACKLD=ld -r --oformat pe-i386
++PACKLD=i686-w64-mingw32-ld -r
+ 
+ ############# Configuration for the contributed libraries
+ 
