@@ -13,8 +13,8 @@ diff -Naur a/byterun/Makefile.nt b/byterun/Makefile.nt
  	         $(EXTRALIBS) libcamlrun.$(A)
  
  ocamlrund$(EXE): libcamlrund.$(A) prims.$(O) main.$(O)
--	$(MKEXE) -o ocamlrun$(EXE) $(BYTECCDBGCOMPOPTS) prims.$(O) \
-+	$(MKEXE) -o ocamlrun$(EXE) prims.$(O) \
+-	$(MKEXE) -o ocamlrund$(EXE) $(BYTECCDBGCOMPOPTS) prims.$(O) \
++	$(MKEXE) -o ocamlrund$(EXE) prims.$(O) \
  	         $(call SYSLIB,ws2_32) $(EXTRALIBS) libcamlrund.$(A)
  
  libcamlrun.$(A): $(OBJS)

@@ -82,11 +82,11 @@ else
   elif [ $VER -gt 4021 ] ; then # 4.02.2-4.02.3
     PATCHES="PR6766 PR6797 gpr#465-3.12.0+ GPR658-to-4.02.3 GPR678 GPR820-4.02.2+"
   elif [ $VER -gt 4020 ] ; then # 4.02.1
-    PATCHES="PR6766 gpr#465-3.12.0+ GPR658-to-4.02.1 GPR678 GPR820-4.02.1"
+    PATCHES="win-runtimed PR6766 gpr#465-3.12.0+ GPR658-to-4.02.1 GPR678 GPR820-4.02.1"
   elif [ $VER -gt 4010 ] ; then # 4.02.0
-    PATCHES="PR6766 gpr#465-3.12.0+ GPR658-to-4.02.1 GPR678 GPR820"
+    PATCHES="win-runtimed PR6766 gpr#465-3.12.0+ GPR658-to-4.02.1 GPR678 GPR820"
   elif [ $VER -gt 4001 ] ; then # 4.01.0
-    PATCHES="PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-4.01.0 GPR820"
+    PATCHES="win-runtimed PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-4.01.0 GPR820"
   elif [ $VER -gt 4000 ] ; then # 4.00.1
     PATCHES="ocamldoc-build PR5011-3.12+4.00 PR6766 tcl-tk-amd64-4.x gpr#465-3.12.0+ GPR658-to-4.01.0 GPR678-to-4.00.1"
   elif [ $VER -gt 3121 ] ; then # 4.00.0
