@@ -1,0 +1,12 @@
+diff -Naur a/byterun/Makefile.nt b/byterun/Makefile.nt
+--- a/byterun/Makefile.nt	2008-11-26 13:26:53.000000000 +0000
++++ b/byterun/Makefile.nt	2016-09-23 11:30:05.347876200 +0100
+@@ -25,7 +25,7 @@
+ 	$(MKEXE) -o ocamlrun$(EXE) prims.$(O) $(call SYSLIB,ws2_32) $(EXTRALIBS) libcamlrun.$(A) 
+ 
+ ocamlrund$(EXE): libcamlrund.$(A) prims.$(O) main.$(O)
+-	$(MKEXE) -o ocamlrun$(EXE) $(BYTECCDBGCOMPOPTS) prims.$(O) $(call SYSLIB,ws2_32) $(EXTRALIBS) libcamlrund.$(A)
++	$(MKEXE) -o ocamlrund$(EXE) $(BYTECCDBGCOMPOPTS) prims.$(O) $(call SYSLIB,ws2_32) $(EXTRALIBS) libcamlrund.$(A)
+ 
+ libcamlrun.$(A): $(OBJS)
+ 	$(call MKLIB,libcamlrun.$(A),$(OBJS))
