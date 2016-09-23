@@ -58,7 +58,7 @@ The following patches address build system or environment changes which have occ
 
 The following patches relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pulls) and [Mantis](http://caml.inria.fr/mantis) PRs:
 
-[`GPR820`](https://github.com/ocaml/ocaml/pull/820) (OCaml 4.01.0--): fixes various issues with compilation of the debugging version of the bytecode runtime. Versions before 4.01.0 not yet reviewed.
+[`GPR820`](https://github.com/ocaml/ocaml/pull/820) (OCaml 4.00.0--): fixes various issues with compilation of the debugging version of the bytecode runtime. The is probably necessary for versions prior to 4.00, but those versions will also need the machinery for `-with-debug-runtime` to be back-ported (at present, that's not considered necessary).
 
 [`PR3485`](http://caml.inria.fr/mantis/view.php?id=3485) (OCaml 3.07--3.08.2): back-ports a Cygwin-related change made in OCaml 3.08.3.
 
