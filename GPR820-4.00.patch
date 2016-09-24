@@ -26,7 +26,7 @@ diff -Naur a/byterun/Makefile.nt b/byterun/Makefile.nt
 +	sed -ne '/\.pic\.o/q' \
 +	    -e 's/^\(.*\)\.d\.o:/\1.$$(DBGO):/' \
 +	    -e 's/^\(.*\)\.o:/\1.$$(O):/' \
-+	    -e p \
++	    -e p .depend.win32 > .depend.nt
  	rm -f .depend.win32
  
  include .depend.nt
