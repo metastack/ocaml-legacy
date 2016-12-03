@@ -60,6 +60,8 @@ The following patches relate to [GitHub Pull Requests](https://github.com/ocaml/
 
 [`GPR820`](https://github.com/ocaml/ocaml/pull/820) (OCaml 4.00.0--): fixes various issues with compilation of the debugging version of the bytecode runtime. The is probably necessary for versions prior to 4.00, but those versions will also need the machinery for `-with-debug-runtime` to be back-ported (at present, that's not considered necessary).
 
+[`GPR912`](https://github.com/ocaml/ocaml/pull/912) (OCaml 4.04.0): back-ports a fix to `Unix.create_process` causing segfaults in the 64-bit MSVC port on Windows 10.
+
 [`PR3485`](http://caml.inria.fr/mantis/view.php?id=3485) (OCaml 3.07--3.08.2): back-ports a Cygwin-related change made in OCaml 3.08.3.
 
 [`PR3821`](http://caml.inria.fr/mantis/view.php?id=3821) (OCaml 3.07--3.09.3): back-ports the rest of [536dfe](https://github.com/ocaml/ocaml/commit/536dfe) to add /subsystem:console option for all invocations of the Microsoft C compiler added in 3.10.0. This is necessary to enable building with Visual Studio 2015.

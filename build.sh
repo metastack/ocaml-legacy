@@ -78,7 +78,7 @@ else
   fi
   tar -xzf $DIR.tar.gz
   if [ $VER -gt 4030 ] ; then # 4.04.0
-    PATCHES="gpr#465-3.12.0+ GPR658"
+    PATCHES="gpr#465-3.12.0+ GPR658 GPR912"
   elif [ $VER -gt 4023 ] ; then # 4.03.0
     PATCHES="gpr#465-3.12.0+ GPR582 GPR658 GPR820-4.02.2+"
   elif [ $VER -gt 4021 ] ; then # 4.02.2-4.02.3

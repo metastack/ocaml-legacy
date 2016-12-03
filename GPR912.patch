@@ -1,0 +1,25 @@
+From 1f9608a3aa24300094852983a525e271efef2796 Mon Sep 17 00:00:00 2001
+From: David Allsopp <david.allsopp@metastack.com>
+Date: Sun, 13 Nov 2016 15:08:31 -0500
+Subject: [PATCH] Fix segfault in Unix.create_process on Windows (#912)
+
+---
+ otherlibs/win32unix/createprocess.c | 2 ++
+ 1 files changed, 2 insertions(+)
+
+diff --git a/otherlibs/win32unix/createprocess.c b/otherlibs/win32unix/createprocess.c
+index 96dbfe4..24ad73a 100644
+--- a/otherlibs/win32unix/createprocess.c
++++ b/otherlibs/win32unix/createprocess.c
+@@ -13,6 +13,8 @@
+ /*                                                                        */
+ /**************************************************************************/
+ 
++#define CAML_INTERNALS
++
+ #include <caml/mlvalues.h>
+ #include "unixsupport.h"
+ #include <windows.h>
+-- 
+2.6.1.windows.1
+
