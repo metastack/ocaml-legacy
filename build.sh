@@ -77,7 +77,9 @@ else
     wget -O $DIR.tar.gz http://caml.inria.fr/pub/distrib/${DIR%.*}/$DIR.tar.gz
   fi
   tar -xzf $DIR.tar.gz
-  if [ $VER -gt 4023 ] ; then # 4.03+
+  if [ $VER -gt 4030 ] ; then # 4.04.0
+    PATCHES="gpr#465-3.12.0+ GPR658"
+  elif [ $VER -gt 4023 ] ; then # 4.03.0
     PATCHES="gpr#465-3.12.0+ GPR582 GPR658 GPR820-4.02.2+"
   elif [ $VER -gt 4021 ] ; then # 4.02.2-4.02.3
     PATCHES="PR6766 PR6797 gpr#465-3.12.0+ GPR658-to-4.02.3 GPR678 GPR820-4.02.2+"
