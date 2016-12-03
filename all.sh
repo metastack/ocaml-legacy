@@ -54,6 +54,16 @@ echo Started at `date`
 for i in $COMPILERS ; do
   if [ ${i//./} -le $FILTER_TOP -a ${i//./} -ge $FILTER_BOTTOM ] ; then
     #mintty --size 269,$ROWS --position 0,$POS ./build.sh $i &
+    if [ ${i//.} -lt 3080 ] ; then
+      for j in .tar.gz -patch1.diffs -patch2.diffs ; do
+        NAME=ocaml-3.07$j
+        if [ ! -e $NAME ] ; then
+          wget http://caml.inria.fr/pub/distrib/ocaml-3.07/$NAME
+        fi
+      done
+    elif [ ! -e ocaml-$i.tar.gz ]; then
+      wget http://caml.inria.fr/pub/distrib/ocaml-${i%.*}/ocaml-$i.tar.gz
+    fi
     ./build.sh $i
     POS=$((POS+INCR))
   else
