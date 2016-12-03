@@ -1,0 +1,109 @@
+From 536dfe0d7cc30260699a0fd53701244c29a77422 Mon Sep 17 00:00:00 2001
+From: Xavier Leroy <xavier.leroy@inria.fr>
+Date: Tue, 9 May 2006 16:00:36 +0000
+Subject: [PATCH] Ajout option /link /subsystem:console pour Windows/msvc et
+ meilleur traitement des options /link passees via -ccopt
+
+git-svn-id: http://caml.inria.fr/svn/ocaml/trunk@7405 f963ae5c-01c2-4b8c-9fe0-0dff7051ff02
+---
+ asmcomp/asmlink.ml   |  2 +-
+ bytecomp/bytelink.ml |  2 +-
+ utils/ccomp.ml       | 30 +++++++++++++++---------------
+ utils/ccomp.mli      |  1 +
+ 4 files changed, 18 insertions(+), 17 deletions(-)
+
+diff --git a/asmcomp/asmlink.ml b/asmcomp/asmlink.ml
+index 4a92c9f..891ac92 100644
+--- a/asmcomp/asmlink.ml
++++ b/asmcomp/asmlink.ml
+@@ -265,7 +265,7 @@ let call_linker file_list startup_file output_name =
+               (List.rev_map Ccomp.expand_libname !Clflags.ccobjs))
+             (Filename.quote runtime_lib)
+             c_lib
+-            (String.concat " " (List.rev !Clflags.ccopts))
++            (Ccomp.make_link_options !Clflags.ccopts)
+         else
+           Printf.sprintf "%s /out:%s %s %s"
+             Config.native_partial_linker
+diff --git a/bytecomp/bytelink.ml b/bytecomp/bytelink.ml
+index 31576ce..11321fc 100644
+--- a/bytecomp/bytelink.ml
++++ b/bytecomp/bytelink.ml
+@@ -464,7 +464,7 @@ let build_custom_runtime prim_name exec_name =
+             (List.rev_map Ccomp.expand_libname !Clflags.ccobjs))
+           (Filename.quote (Ccomp.expand_libname "-lcamlrun"))
+           Config.bytecomp_c_libraries
+-          (String.concat " " (List.rev !Clflags.ccopts))) in
++          (Ccomp.make_link_options !Clflags.ccopts)) in
+       (* C compiler doesn't clean up after itself.  Note that the .obj
+          file is created in the current working directory. *)
+       remove_file
+diff --git a/utils/ccomp.ml b/utils/ccomp.ml
+index 966011e..1d35dce 100644
+--- a/utils/ccomp.ml
++++ b/utils/ccomp.ml
+@@ -47,19 +47,6 @@ let quote_files lst =
+   else s
+ 
+ let compile_file name =
+-  match Config.ccomp_type with
+-  | "mrc" ->
+-     let qname = Filename.quote name in
+-     let includes = (Clflags.std_include_dir ()) @ !Clflags.include_dirs
+-     in
+-     let args =
+-       Printf.sprintf " %s %s -i %s"
+-         (String.concat " " (List.rev_map Filename.quote !Clflags.ccopts))
+-         (String.concat "," (List.rev_map Filename.quote includes))
+-         qname
+-     in
+-     command ("mrc " ^ args ^ " -o " ^ qname ^ ".x")
+-  | "cc" | "msvc" ->
+      command
+        (Printf.sprintf
+          "%s -c %s %s %s %s"
+@@ -69,14 +56,13 @@ let compile_file name =
+              (List.rev_map (fun dir -> "-I" ^ dir) !Clflags.include_dirs))
+          (Clflags.std_include_flag "-I")
+          (Filename.quote name))
+-  | _ -> assert false
+ 
+ let create_archive archive file_list =
+   Misc.remove_file archive;
+   let quoted_archive = Filename.quote archive in
+   match Config.ccomp_type with
+     "msvc" ->
+       command(Printf.sprintf "link /lib /nologo /out:%s %s"
+                              quoted_archive (quote_files file_list))
+   | _ ->
+       let r1 =
+@@ -97,3 +83,17 @@ let expand_libname name =
+     with Not_found ->
+       libname
+   end
++
++(* Handling of msvc's /link options *)
++
++let make_link_options optlist =
++  let rec split linkopts otheropts = function
++  | [] -> String.concat " " otheropts
++	  ^ " /link /subsystem:console "
++          ^ String.concat " " linkopts
++  | opt :: rem ->
++      if String.length opt >= 5 && String.sub opt 0 5 = "/link"
++      then split (String.sub opt 5 (String.length opt - 5) :: linkopts)
++                 otheropts rem
++      else split linkopts (opt :: otheropts) rem
++  in split [] [] optlist
+diff --git a/utils/ccomp.mli b/utils/ccomp.mli
+index 3a1e7fc..d5d49c7 100644
+--- a/utils/ccomp.mli
++++ b/utils/ccomp.mli
+@@ -20,3 +20,4 @@ val compile_file: string -> int
+ val create_archive: string -> string list -> int
+ val expand_libname: string -> string
+ val quote_files: string list -> string
++val make_link_options: string list -> string
+-- 
+2.6.1.windows.1
+

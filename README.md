@@ -62,6 +62,8 @@ The following patches relate to [GitHub Pull Requests](https://github.com/ocaml/
 
 [`PR3485`](http://caml.inria.fr/mantis/view.php?id=3485) (OCaml 3.07--3.08.2): back-ports a Cygwin-related change made in OCaml 3.08.3.
 
+[`PR3821`](http://caml.inria.fr/mantis/view.php?id=3821) (OCaml 3.07--3.09.3): back-ports the rest of [536dfe](https://github.com/ocaml/ocaml/commit/536dfe) to add /subsystem:console option for all invocations of the Microsoft C compiler added in 3.10.0. This is necessary to enable building with Visual Studio 2015.
+
 [`PR4483`](http://caml.inria.fr/mantis/view.php?id=4483) (OCaml 3.10.1): back-ports commit [fd07b4](https://github.com/ocaml/ocaml/commit/fd07b4) from OCaml 3.10.2 converting `byterun/finalise.c` back to ANSI C.
 
 [`PR4614`](http://caml.inria.fr/mantis/view.php?id=4614) (OCaml 3.07--3.10.x): back-ports commits [ad3ca0](https://github.com/ocaml/ocaml/commit/ad3ca0) and [ff88bb](https://github.com/ocaml/ocaml/commit/ff88bb) to allow building with Tcl/Tk 8.5 to OCaml 3.11.0 when support was officially added.
