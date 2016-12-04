@@ -1,0 +1,38 @@
+From 1be30315bacdd98d94b5464a755c9ca18cfacdad Mon Sep 17 00:00:00 2001
+From: David Allsopp <david.allsopp@metastack.com>
+Date: Fri, 8 Jan 2016 12:09:32 +0000
+Subject: [PATCH] Fix build process for Visual Studio 2015
+
+Visual Studio 2015 is the first version incorporating Microsoft's
+Universal CRT. In this new version, rather than just linking msvcrt.lib,
+ucrt.lib and vcruntime.lib must also be linked.
+
+In virtually all instances, the linker handles this automatically. One
+of the highly specific cases in which it appears not to is when there
+are #pragma directives specifying linker libraries and options and then
+the final program is linked using link directly rather than cl.
+
+Fixes stdlib/headernt.c to add ucrt.lib and vcruntime.lib when compiling
+against the Universal CRT.
+---
+ stdlib/headernt.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/stdlib/headernt.c b/stdlib/headernt.c
+index e95223d..c8f8668 100644
+--- a/stdlib/headernt.c
++++ b/stdlib/headernt.c
+@@ -22,6 +22,10 @@
+ #pragma comment(linker , "/entry:headerentry")
+ #pragma comment(linker , "/subsystem:console")
+ #pragma comment(lib , "kernel32")
++#ifdef _UCRT
++#pragma comment(lib , "ucrt.lib")
++#pragma comment(lib , "vcruntime.lib")
++#endif
+ #endif
+ 
+ char * default_runtime_name = RUNTIME_NAME;
+-- 
+2.6.2.windows.1
+

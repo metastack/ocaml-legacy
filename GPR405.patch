@@ -1,0 +1,74 @@
+From 0d4a7f42ea2ea63b325b39e50d9d36444ec242b0 Mon Sep 17 00:00:00 2001
+From: David Allsopp <david.allsopp@metastack.com>
+Date: Fri, 8 Jan 2016 12:07:44 +0000
+Subject: [PATCH] Fix build process for Visual Studio 2015
+
+Visual Studio 2015 is the first version incorporating Microsoft's
+Universal CRT. In this new version, rather than just linking msvcrt.lib,
+ucrt.lib and vcruntime.lib must also be linked.
+
+In virtually all instances, the linker handles this automatically. One
+of the highly specific cases in which it appears not to is when there
+are #pragma directives specifying linker libraries and options and then
+the final program is linked using link directly rather than cl.
+
+Fixes stdlib/headernt.c to add ucrt.lib and vcruntime.lib when compiling
+against the Universal CRT.
+
+Microsoft also improved the support for C99 in Visual Studio 2015 and
+added a compliant implementation of snprintf. Tightens the criteria for
+`caml_snprintf` being used instead to ignore the Universal CRT.
+---
+ byterun/caml/misc.h | 2 +-
+ byterun/win32.c     | 2 ++
+ stdlib/headernt.c   | 4 ++++
+ 4 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/byterun/caml/misc.h b/byterun/caml/misc.h
+index 18c2c30..c8ff8c0 100644
+--- a/byterun/caml/misc.h
++++ b/byterun/caml/misc.h
+@@ -196,7 +196,7 @@ extern void caml_set_fields (intnat v, unsigned long, unsigned long);
+ 
+ /* snprintf emulation for Win32 */
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(_UCRT)
+ extern int caml_snprintf(char * buf, size_t size, const char * format, ...);
+ #define snprintf caml_snprintf
+ #endif
+diff --git a/byterun/win32.c b/byterun/win32.c
+index c0c9458..737d7cf 100644
+--- a/byterun/win32.c
++++ b/byterun/win32.c
+@@ -610,6 +610,7 @@ int caml_executable_name(char * name, int name_len)
+ 
+ /* snprintf emulation */
+ 
++#if defined(_WIN32) && !defined(_UCRT)
+ int caml_snprintf(char * buf, size_t size, const char * format, ...)
+ {
+   int len;
+@@ -634,3 +635,4 @@ int caml_snprintf(char * buf, size_t size, const char * format, ...)
+   va_end(args);
+   return len;
+ }
++#endif
+diff --git a/stdlib/headernt.c b/stdlib/headernt.c
+index e95223d..c8f8668 100644
+--- a/stdlib/headernt.c
++++ b/stdlib/headernt.c
+@@ -22,6 +22,10 @@
+ #pragma comment(linker , "/entry:headerentry")
+ #pragma comment(linker , "/subsystem:console")
+ #pragma comment(lib , "kernel32")
++#ifdef _UCRT
++#pragma comment(lib , "ucrt.lib")
++#pragma comment(lib , "vcruntime.lib")
++#endif
+ #endif
+ 
+ char * default_runtime_name = RUNTIME_NAME;
+-- 
+2.6.2.windows.1
+

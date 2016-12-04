@@ -58,6 +58,8 @@ The following patches address build system or environment changes which have occ
 
 The following patches relate to [GitHub Pull Requests](https://github.com/ocaml/ocaml/pulls) and [Mantis](http://caml.inria.fr/mantis) PRs:
 
+[`GPR405`](https://github.com/ocaml/ocaml/pull/405) (OCaml 3.07--4.02.3): enables compilation of the MSVC ports with Visual Studio 2015.
+
 [`GPR820`](https://github.com/ocaml/ocaml/pull/820) (OCaml 4.00.0--): fixes various issues with compilation of the debugging version of the bytecode runtime. The is probably necessary for versions prior to 4.00, but those versions will also need the machinery for `-with-debug-runtime` to be back-ported (at present, that's not considered necessary).
 
 [`GPR912`](https://github.com/ocaml/ocaml/pull/912) (OCaml 4.04.0): back-ports a fix to `Unix.create_process` causing segfaults in the 64-bit MSVC port on Windows 10.
