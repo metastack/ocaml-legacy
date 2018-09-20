@@ -76,6 +76,8 @@ The following patches relate to [GitHub Pull Requests](https://github.com/ocaml/
 
 [`PR5011`](http://caml.inria.fr/mantis/view.php?id=5011) (OCaml 3.07--4.00.x): back-ports changes introduced in OCaml 4.01.0 to support Tcl/Tk 8.6.
 
+[`PR5477`](http://caml.inria.fr/mantis/view.php?id=5477) (OCaml 3.07--3.12.1): back-ports detection of libX11 using pkg-config from OCaml 4.00.0.
+
 ## Copyright
 
 `all.sh` and `build.sh` are copyright MetaStack Solutions Ltd., 2016 and distributed under the terms of the licence given at the top of each file.
